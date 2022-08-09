@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CheckStyle-IDEA" serialisationVersion="2">
+    <checkstyleVersion>8.40</checkstyleVersion>
+    <scanScope>AllSourcesWithTests</scanScope>
+    <suppressErrors>true</suppressErrors>
+    <copyLibs>true</copyLibs>
+    <option name="thirdPartyClasspath" />
+    <option name="activeLocationIds">
+      <option value="1646a96d-4412-4a5c-b839-80f3326499ac" />
+    </option>
+    <option name="locations">
+      <list>
+        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="1646a96d-4412-4a5c-b839-80f3326499ac" type="LOCAL_FILE" scope="All" description="Tenxcloud">E:/项目资料/PICC 项目/CheckStyle.xml</ConfigurationLocation>
+      </list>
+    </option>
+  </component>
+</project>
