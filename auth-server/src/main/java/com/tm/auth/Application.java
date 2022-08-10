@@ -1,13 +1,13 @@
-package com.tm.resource.server;
+package com.tm.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OauthServerApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OauthServerApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }

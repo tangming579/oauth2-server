@@ -1,4 +1,4 @@
-package com.tm.resource.server.config;
+package com.tm.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.tm.resource.server.config;
+package com.tm.auth.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

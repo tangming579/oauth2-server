@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
-		<module>oauth-server</module>
+		<module>auth-server</module>
 		<module>resource-server</module>
 	</modules>
 	<packaging>pom</packaging>
