@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -42,12 +43,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private DataSource dataSource;
 
     /**
-     * 用户service
-     */
-    @Resource
-    private UserDetailsServiceImpl userDetailsServiceImpl;
-
-    /**
      * 密码编码器
      */
     @Resource
@@ -66,11 +61,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                // 与SpringSecurity中的access()方法类似,设置复杂安全表达式
                 // 设置可以请求接入点的安全表达式为`permitAll()`
                 .tokenKeyAccess("permitAll()")
                 // 设置检查token的安全表达式为`isAuthenticated()`，已认证
-                .checkTokenAccess("isAuthenticated()")
+                .checkTokenAccess("permitAll()")
                 // 允许进行表单认证
                 .allowFormAuthenticationForClients()
                 // 设置oauth_client_details中的密码编码器
@@ -108,8 +102,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenStore(tokenStore())
                 // 配置认证 manager
                 .authenticationManager(authenticationManager);
-                // 配置用户
-                //.userDetailsService(userDetailsServiceImpl);
     }
 
     /**
@@ -121,7 +113,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         //非对称加密签名
-        converter.setKeyPair(this.keyPair);
+        converter.setKeyPair(keyPair);
+        //对称加密签名
+        //converter.setSigningKey("xxx");
         return converter;
     }
 
@@ -131,6 +125,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Bean
     public TokenStore tokenStore() {
+        //将token保存在redis中
+        //return new RedisTokenStore(connectionFactory);
         //将token保存在内存中
         return new InMemoryTokenStore();
     }

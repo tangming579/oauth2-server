@@ -17,7 +17,7 @@ import java.util.Map;
  * @date 2022/8/9
  */
 @Configuration
-public class AppConfig {
+public class WebConfig {
     /**
      * 编码器创建
      * @return PasswordEncoder
