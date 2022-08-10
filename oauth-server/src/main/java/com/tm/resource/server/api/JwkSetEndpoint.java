@@ -1,4 +1,4 @@
-package com.tm.oauth.server.api;
+package com.tm.resource.server.api;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

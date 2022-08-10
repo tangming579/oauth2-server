@@ -1,4 +1,4 @@
-package com.tm.oauth.server.api;
+package com.tm.resource.server.api;
 
 /**
  * @author tangming

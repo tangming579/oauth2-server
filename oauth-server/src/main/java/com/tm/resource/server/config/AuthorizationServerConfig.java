@@ -1,6 +1,6 @@
-package com.tm.oauth.server.config;
+package com.tm.resource.server.config;
 
-import com.tm.oauth.server.service.UserDetailsServiceImpl;
+import com.tm.resource.server.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

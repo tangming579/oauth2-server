@@ -1,4 +1,4 @@
-package com.tm.oauth.server.service;
+package com.tm.resource.server.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,10 +1,10 @@
-package com.tm.oauth.server;
+package com.tm.resource.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OauthServerApplicationTests {
+class ApplicationTests {
 
 	@Test
 	void contextLoads() {
