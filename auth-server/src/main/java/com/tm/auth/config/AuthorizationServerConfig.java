@@ -4,6 +4,7 @@ import com.tm.auth.service.OAuthClientService;
 import com.tm.auth.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -30,6 +31,7 @@ import java.util.Collections;
  */
 @EnableAuthorizationServer
 @Configuration
+@Order(2)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     /**
@@ -108,7 +110,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         services.setClientDetailsService(clientService);
         // 存储令牌方式
         services.setTokenStore(tokenStore);
-        //3.设置令牌增强(改变默认令牌创建方式，没有这句话默认是UUID)
+        // 设置令牌增强(改变默认令牌创建方式，没有这句话默认是UUID)
         services.setTokenEnhancer(accessTokenConverter);
         // 令牌有效期
         services.setAccessTokenValiditySeconds(60 * 60 * 2);
