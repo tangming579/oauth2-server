@@ -1,7 +1,12 @@
 package com.tm.resource.server.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.tm.resource.server.service.CustomResourceServerTokenServices;
+import com.tm.resource.server.utlis.JsonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +19,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,9 +31,19 @@ import java.util.stream.Stream;
  * @author tangming
  * @date 2022/8/10
  */
+@Slf4j
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    
+    /**
+     * 资源服务器 ID
+     */
+    private static final String RESOURCE_ID = "resource-server";
+    private static final String AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL = "http://localhost:18957/token-customize-authorization-server/oauth/token_key";
+
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -37,21 +55,29 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.tokenServices(tokenServices());
+        // @formatter:off
+        resources.resourceId(RESOURCE_ID).stateless(true);
+
+        // ~ 指定 ResourceServerTokenServices
+        resources.tokenServices(new CustomResourceServerTokenServices(jwtAccessTokenConverter()));
+
+        // ~ AuthenticationEntryPoint. ref: OAuth2AuthenticationProcessingFilter
+        resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 
-    /**
-     * 配置资源服务器如何验证token有效性
-     * 1. DefaultTokenServices
-     * 如果认证服务器和资源服务器同一服务时,则直接采用此默认服务验证即可
-     * 2. RemoteTokenServices (当前采用这个)
-     * 当认证服务器和资源服务器不是同一服务时, 要使用此服务去远程认证服务器验证
-     */
-    public ResourceServerTokenServices tokenServices() {
-        RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
-        remoteTokenServices.setCheckTokenEndpointUrl("http://localhost:8080/authorization-server/oauth/check_token");
-        remoteTokenServices.setClientId("resource-server");
-        remoteTokenServices.setClientSecret("12345678");
-        return remoteTokenServices;
+    @SuppressWarnings("deprecation")
+    private JwtAccessTokenConverter jwtAccessTokenConverter() {
+        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setVerifier(new org.springframework.security.jwt.crypto.sign.RsaVerifier(retrievePublicKey()));
+        return jwtAccessTokenConverter;
+    }
+
+    private String retrievePublicKey() {
+        final RestTemplate restTemplate = new RestTemplate();
+        final String responseValue = restTemplate.getForObject(AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL, String.class);
+
+        log.debug("{} :: 授权服务器返回原始公钥信息: {}", RESOURCE_ID, responseValue);
+        String publicKey = JsonUtil.toJsonNode(responseValue).get("value").asText();
+        return publicKey;
     }
 }
