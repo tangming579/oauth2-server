@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -67,14 +68,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                // 设置可以请求接入点的安全表达式为`permitAll()`
+                //获取令牌的服务端点是公开的
                 .tokenKeyAccess("permitAll()")
-                // 设置检查token的安全表达式为`isAuthenticated()`，已认证
+                //校验令牌的服务端点是公开的
                 .checkTokenAccess("permitAll()")
-                // 允许进行表单认证
-                .allowFormAuthenticationForClients()
+                // 允许进行表单方式获取令牌
+                .allowFormAuthenticationForClients();
+
                 // 设置oauth_client_details中的密码编码器
-                .passwordEncoder(passwordEncoder);
+                //.passwordEncoder(passwordEncoder);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     /**

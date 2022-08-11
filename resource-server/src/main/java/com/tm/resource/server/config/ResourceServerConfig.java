@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.tm.resource.server.service.CustomResourceServerTokenServices;
 import com.tm.resource.server.utlis.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
@@ -44,11 +46,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests(req -> req.antMatchers("/auth/**").permitAll())
-                //oauth2使用jwt模式，会走接口拿取公钥解密验签
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
-        super.configure(http);
+        http.authorizeRequests().anyRequest().authenticated();
     }
 
     @Override
@@ -56,11 +54,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //resources.tokenServices(tokenServices());
 
         resources.resourceId(RESOURCE_ID).stateless(true);
-        resources.tokenServices(tokenServices2());
+        resources.tokenServices(tokenServices());
         //resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 
-    public CustomResourceServerTokenServices tokenServices2(){
+    public CustomResourceServerTokenServices tokenServices(){
         CustomResourceServerTokenServices services = new CustomResourceServerTokenServices();
         return services;
     }

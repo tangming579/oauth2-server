@@ -22,7 +22,7 @@ public class CustomResourceServerTokenServices implements ResourceServerTokenSer
 
     private final TokenStore tokenStore;
     private static final String RESOURCE_ID = "resource-server";
-    private static final String AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL = "http://localhost:8080/authorization-server/oauth/token_key";
+    private static final String AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL = "http://localhost:9024/oauth/token_key";
 
     public CustomResourceServerTokenServices() {
         this.tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
@@ -30,7 +30,7 @@ public class CustomResourceServerTokenServices implements ResourceServerTokenSer
 
     /**
      * Description: 用于从 accessToken 中加载凭证信息, 并构建出 {@link OAuth2Authentication} 的方法<br>
-     *     Details:
+     * Details:
      *
      * @see ResourceServerTokenServices#loadAuthentication(String)
      */
@@ -38,8 +38,8 @@ public class CustomResourceServerTokenServices implements ResourceServerTokenSer
     public OAuth2Authentication loadAuthentication(String accessToken) throws AuthenticationException, InvalidTokenException {
         log.debug("CustomResourceServerTokenServices :: loadAuthentication called ...");
         log.trace("CustomResourceServerTokenServices :: loadAuthentication :: accessToken: {}", accessToken);
-
-        return tokenStore.readAuthentication(accessToken);
+        OAuth2Authentication auth2Authentication = tokenStore.readAuthentication(accessToken);
+        return auth2Authentication;
     }
 
     @Override
@@ -47,6 +47,7 @@ public class CustomResourceServerTokenServices implements ResourceServerTokenSer
         log.debug("CustomResourceServerTokenServices :: readAccessToken called ...");
         throw new UnsupportedOperationException("暂不支持 readAccessToken!");
     }
+
     @SuppressWarnings("deprecation")
     private JwtAccessTokenConverter jwtAccessTokenConverter() {
         final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();

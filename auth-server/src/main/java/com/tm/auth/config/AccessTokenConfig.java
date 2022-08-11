@@ -66,15 +66,15 @@ public class AccessTokenConfig {
         return ksFactory.getKeyPair("oauth-jwt");
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        //默认编码算法的Id,新的密码编码都会使用这个id对应的编码器
-        String idForEncode = "bcrypt";
-        Map encoders = new HashMap();
-        encoders.put(idForEncode,new BCryptPasswordEncoder());
-        //（默认编码器id，编码器map）
-        return new DelegatingPasswordEncoder(idForEncode,encoders);
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        //默认编码算法的Id,新的密码编码都会使用这个id对应的编码器
+//        String idForEncode = "bcrypt";
+//        Map encoders = new HashMap();
+//        encoders.put(idForEncode,new BCryptPasswordEncoder());
+//        //（默认编码器id，编码器map）
+//        return new DelegatingPasswordEncoder(idForEncode,encoders);
+//    }
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
