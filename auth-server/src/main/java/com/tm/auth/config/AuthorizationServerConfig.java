@@ -1,5 +1,6 @@
 package com.tm.auth.config;
 
+import com.tm.auth.service.OAuthClientService;
 import com.tm.auth.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -35,13 +38,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     private KeyPair keyPair;
 
-    /**
-     * 数据源
-     * 读取配置文件中spring.datasource的配置
-     */
     @Resource
-    private DataSource dataSource;
+    TokenStore tokenStore;
 
+    @Resource
+    JwtAccessTokenConverter accessTokenConverter;
     /**
      * 密码编码器
      */
@@ -50,6 +51,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Resource
     private AuthenticationManager authenticationManager;
+
+    @Resource
+    OAuthClientService clientService;
 
 
     /**
@@ -80,8 +84,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        // 读取配置文件中spring.datasource的配置
-        clients.jdbc(dataSource);
+        // 自定义
+        clients.withClientDetails(clientService);
     }
 
     /**
@@ -90,44 +94,28 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        // endpoints.pathMapping("/oauth/token","/token/login");  设置token生成请求地址
-        TokenEnhancerChain chain = new TokenEnhancerChain();
-        chain.setTokenEnhancers(Collections.singletonList(accessTokenConverter()));
 
-        endpoints
-                // chain和accessTokenConverter()二选一即可
-                //.accessTokenConverter(accessTokenConverter())
-                .tokenEnhancer(chain)
-                // token 持久化
-                .tokenStore(tokenStore())
-                // 配置认证 manager
-                .authenticationManager(authenticationManager);
+        endpoints.authenticationManager(authenticationManager)
+                .tokenStore(tokenStore)
+                .accessTokenConverter(accessTokenConverter)
+                .tokenServices(tokenServices()); // 设置检验token 服务配置
     }
 
-    /**
-     * 使用jwt生成token
-     * 如果需要自定义token或者获取token接口的返回体，需要实现TokenEnhancer接口的enhance方法，具体可以看一下JwtAccessTokenConverter类
-     * @return JwtAccessTokenConverter
-     */
     @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        //非对称加密签名
-        converter.setKeyPair(keyPair);
-        //对称加密签名
-        //converter.setSigningKey("xxx");
-        return converter;
-    }
-
-    /**
-     * token持久化
-     * @return TokenStore
-     */
-    @Bean
-    public TokenStore tokenStore() {
-        //将token保存在redis中
-        //return new RedisTokenStore(connectionFactory);
-        //将token保存在内存中
-        return new InMemoryTokenStore();
+    AuthorizationServerTokenServices tokenServices() {
+        DefaultTokenServices services = new DefaultTokenServices();
+        // 客户端服务
+        services.setClientDetailsService(clientService);
+        // 存储令牌方式
+        services.setTokenStore(tokenStore);
+        //3.设置令牌增强(改变默认令牌创建方式，没有这句话默认是UUID)
+        services.setTokenEnhancer(accessTokenConverter);
+        // 令牌有效期
+        services.setAccessTokenValiditySeconds(60 * 60 * 2);
+        // 支持令牌刷新
+        services.setSupportRefreshToken(true);
+        // 刷新令牌有效期
+        services.setRefreshTokenValiditySeconds(60 * 60 * 24 * 3);
+        return services;
     }
 }
