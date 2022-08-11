@@ -1,5 +1,6 @@
 package com.tm.resource.server.service;
 
+import com.tm.resource.server.utlis.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -9,6 +10,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.client.RestTemplate;
 
 
 /**
@@ -19,9 +21,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class CustomResourceServerTokenServices implements ResourceServerTokenServices {
 
     private final TokenStore tokenStore;
+    private static final String RESOURCE_ID = "resource-server";
+    private static final String AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL = "http://localhost:8080/authorization-server/oauth/token_key";
 
-    public CustomResourceServerTokenServices(JwtAccessTokenConverter accessTokenConverter) {
-        this.tokenStore = new JwtTokenStore(accessTokenConverter);
+    public CustomResourceServerTokenServices() {
+        this.tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     /**
@@ -43,5 +47,19 @@ public class CustomResourceServerTokenServices implements ResourceServerTokenSer
         log.debug("CustomResourceServerTokenServices :: readAccessToken called ...");
         throw new UnsupportedOperationException("暂不支持 readAccessToken!");
     }
+    @SuppressWarnings("deprecation")
+    private JwtAccessTokenConverter jwtAccessTokenConverter() {
+        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setVerifier(new org.springframework.security.jwt.crypto.sign.RsaVerifier(retrievePublicKey()));
+        return jwtAccessTokenConverter;
+    }
 
+    private String retrievePublicKey() {
+        final RestTemplate restTemplate = new RestTemplate();
+        final String responseValue = restTemplate.getForObject(AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL, String.class);
+
+        log.debug("{} :: 授权服务器返回原始公钥信息: {}", RESOURCE_ID, responseValue);
+        String publicKey = JsonUtil.toJsonNode(responseValue).get("value").asText();
+        return publicKey;
+    }
 }

@@ -1,7 +1,6 @@
 package com.tm.resource.server.utlis;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
@@ -37,7 +36,7 @@ public class JsonUtil {
     public static <T> T parseObject(String json, Class<T> tClass) {
         try {
             return mapper.readValue(json, tClass);
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("parseObject from string failed：" + e.getMessage());
         }
     }
@@ -46,7 +45,7 @@ public class JsonUtil {
         try {
             Reader reader = new InputStreamReader(inputStream);
             return mapper.readValue(reader, tClass);
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("parseObject from stream failed：" + e.getMessage());
         }
     }
@@ -54,7 +53,7 @@ public class JsonUtil {
     public static Map<String, Object> parseMap(String json) {
         try {
             return mapper.readValue(json, Map.class);
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("parseMap failed：" + e.getMessage());
         }
     }
@@ -64,7 +63,7 @@ public class JsonUtil {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, tClass);
             List<T> list = mapper.readValue(json, javaType);
             return list;
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("parseList failed：" + e.getMessage());
         }
     }
@@ -72,7 +71,7 @@ public class JsonUtil {
     public static String toJsonString(Object object) {
         try {
             return mapper.writeValueAsString(object);
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("toJsonString failed：" + e.getMessage());
         }
     }
@@ -81,7 +80,7 @@ public class JsonUtil {
         try {
             JsonNode jsonNode = mapper.readTree(json);
             return jsonNode;
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("toJsonNode failed：" + e.getMessage());
         }
     }
@@ -91,7 +90,7 @@ public class JsonUtil {
             String jsonStr = mapper.writeValueAsString(object);
             JsonNode jsonNode = mapper.readTree(jsonStr);
             return jsonNode;
-        } catch (JacksonException e) {
+        } catch (Exception e) {
             throw new BusinessException("toJsonNode failed：" + e.getMessage());
         }
     }

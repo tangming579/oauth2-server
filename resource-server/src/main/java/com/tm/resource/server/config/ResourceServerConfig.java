@@ -35,12 +35,10 @@ import java.util.stream.Stream;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    
     /**
      * 资源服务器 ID
      */
     private static final String RESOURCE_ID = "resource-server";
-    private static final String AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL = "http://localhost:18957/token-customize-authorization-server/oauth/token_key";
 
     private AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -55,29 +53,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        // @formatter:off
+        //resources.tokenServices(tokenServices());
+
         resources.resourceId(RESOURCE_ID).stateless(true);
-
-        // ~ 指定 ResourceServerTokenServices
-        resources.tokenServices(new CustomResourceServerTokenServices(jwtAccessTokenConverter()));
-
-        // ~ AuthenticationEntryPoint. ref: OAuth2AuthenticationProcessingFilter
-        resources.authenticationEntryPoint(authenticationEntryPoint);
+        resources.tokenServices(tokenServices2());
+        //resources.authenticationEntryPoint(authenticationEntryPoint);
     }
 
-    @SuppressWarnings("deprecation")
-    private JwtAccessTokenConverter jwtAccessTokenConverter() {
-        final JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setVerifier(new org.springframework.security.jwt.crypto.sign.RsaVerifier(retrievePublicKey()));
-        return jwtAccessTokenConverter;
-    }
-
-    private String retrievePublicKey() {
-        final RestTemplate restTemplate = new RestTemplate();
-        final String responseValue = restTemplate.getForObject(AUTHORIZATION_SERVER_TOKEN_KEY_ENDPOINT_URL, String.class);
-
-        log.debug("{} :: 授权服务器返回原始公钥信息: {}", RESOURCE_ID, responseValue);
-        String publicKey = JsonUtil.toJsonNode(responseValue).get("value").asText();
-        return publicKey;
+    public CustomResourceServerTokenServices tokenServices2(){
+        CustomResourceServerTokenServices services = new CustomResourceServerTokenServices();
+        return services;
     }
 }
