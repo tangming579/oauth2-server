@@ -1,5 +1,6 @@
 package com.tm.auth.po;
 
+import com.tm.auth.common.converter.GrantedAuthorityConverter;
 import com.tm.auth.common.converter.StringSetConverter;
 import lombok.Data;
 import lombok.ToString;
@@ -82,7 +83,8 @@ public class OAuthClient implements ClientDetails {
     /**
      * 指定客户端所拥有的Spring Security的权限值
      */
-    @Transient
+    @Column(name = "authorities")
+    @Convert(converter = GrantedAuthorityConverter.class)
     private List<GrantedAuthority> authorities;
 
 
@@ -116,11 +118,4 @@ public class OAuthClient implements ClientDetails {
     public Set<String> getAuthorizedGrantTypes() {
         return new HashSet<>(Arrays.asList(this.authorizedGrantTypes.split(",")));
     }
-
-
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return Collections.EMPTY_LIST;
-    }
-
 }

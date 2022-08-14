@@ -17,6 +17,7 @@ public class TestController {
         return "hello world!";
     }
 
+    @PreAuthorize("hasAuthority('sys:dept:world')")
     @GetMapping(value = "/world")
     public String world(){
         return "hello world!";

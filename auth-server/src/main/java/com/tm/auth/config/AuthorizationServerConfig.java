@@ -29,12 +29,6 @@ import java.security.KeyPair;
 @Order(2)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    /**
-     * 密钥对
-     */
-    @Resource
-    private KeyPair keyPair;
-
     @Resource
     TokenStore tokenStore;
 

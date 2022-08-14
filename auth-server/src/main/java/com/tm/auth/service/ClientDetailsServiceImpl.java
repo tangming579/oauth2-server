@@ -3,6 +3,7 @@ package com.tm.auth.service;
 import com.tm.auth.dao.OAuthClientDao;
 import com.tm.auth.po.OAuthClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -24,9 +25,6 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Resource
     OAuthClientDao oAuthClientDao;
 
-    @Resource
-    PasswordEncoder passwordEncoder;
-
     /**
      * 获取授权id
      *
@@ -45,5 +43,11 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
         } catch (Exception e) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
+    }
+
+    public void create(OAuthClient client) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
+        oAuthClientDao.save(client);
     }
 }
