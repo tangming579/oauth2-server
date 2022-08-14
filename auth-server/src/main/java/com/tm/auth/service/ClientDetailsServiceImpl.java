@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-public class OAuthClientService implements ClientDetailsService {
+public class ClientDetailsServiceImpl implements ClientDetailsService {
 
     @Resource
     OAuthClientDao oAuthClientDao;

@@ -1,7 +1,6 @@
 package com.tm.auth.config;
 
-import com.tm.auth.service.OAuthClientService;
-import com.tm.auth.service.UserDetailsServiceImpl;
+import com.tm.auth.service.ClientDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -15,16 +14,11 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 import java.security.KeyPair;
-import java.util.Collections;
 
 /**
  * @author tangming
@@ -56,7 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
 
     @Resource
-    OAuthClientService clientService;
+    ClientDetailsServiceImpl clientService;
 
 
     /**
@@ -74,9 +68,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .checkTokenAccess("permitAll()")
                 // 允许进行表单方式获取令牌
                 .allowFormAuthenticationForClients();
-
-                // 设置oauth_client_details中的密码编码器
-                //.passwordEncoder(passwordEncoder);
     }
 
     @Bean

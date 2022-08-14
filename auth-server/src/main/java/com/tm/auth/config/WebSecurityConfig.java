@@ -18,6 +18,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * 配置认证管理器
+     *
+     * @return
+     * @throws Exception
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -26,8 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable);
+        http.
+                authorizeRequests().anyRequest().permitAll()
+                .and().csrf().disable().cors();
     }
 
     @Override
