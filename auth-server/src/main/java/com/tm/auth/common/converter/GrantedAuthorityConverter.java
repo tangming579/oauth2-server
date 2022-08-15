@@ -2,6 +2,7 @@ package com.tm.auth.common.converter;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.AttributeConverter;
@@ -27,7 +28,7 @@ public class GrantedAuthorityConverter implements AttributeConverter<List<Grante
     @Override
     public List<GrantedAuthority> convertToEntityAttribute(String s) {
         if (!StringUtils.hasText(s))
-            return null;
+            return Collections.emptyList();
         return AuthorityUtils.commaSeparatedStringToAuthorityList(s);
     }
 }
