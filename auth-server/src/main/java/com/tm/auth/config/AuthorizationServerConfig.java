@@ -1,6 +1,8 @@
 package com.tm.auth.config;
 
+import com.tm.auth.common.converter.CustomJwtAccessTokenConverter;
 import com.tm.auth.service.ClientDetailsServiceImpl;
+import com.tm.auth.service.CustomTokenServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -84,6 +86,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * 配置授权访问的接入点
+     *
      * @param endpoints
      */
     @Override
@@ -97,7 +100,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     AuthorizationServerTokenServices tokenServices() {
-        DefaultTokenServices services = new DefaultTokenServices();
+        DefaultTokenServices services = new CustomTokenServices();
         // 客户端服务
         services.setClientDetailsService(clientService);
         // 存储令牌方式

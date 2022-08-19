@@ -1,5 +1,6 @@
 package com.tm.auth.config;
 
+import com.tm.auth.common.converter.CustomJwtAccessTokenConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -55,9 +56,7 @@ public class AccessTokenConfig {
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter =
-                new JwtAccessTokenConverter();
-        //jwtAccessTokenConverter.setSigningKey(SIGNING_KEY);//设置密钥
+        JwtAccessTokenConverter jwtAccessTokenConverter = new CustomJwtAccessTokenConverter();
         //非对称加密签名
         jwtAccessTokenConverter.setKeyPair(this.keyPair);
         return jwtAccessTokenConverter;
@@ -99,7 +98,7 @@ public class AccessTokenConfig {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        JwtAccessTokenConverter converter = new CustomJwtAccessTokenConverter();
         //非对称加密签名
         converter.setKeyPair(keyPair);
         //对称加密签名
