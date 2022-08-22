@@ -1,6 +1,6 @@
 package com.tm.auth.config;
 
-import com.tm.auth.common.converter.CustomJwtAccessTokenConverter;
+import com.tm.auth.common.converter.SMJwtAccessTokenConverter;
 import com.tm.auth.service.ClientDetailsServiceImpl;
 import com.tm.auth.service.CustomTokenServices;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.annotation.Resource;
-import java.security.KeyPair;
 
 /**
  * @author tangming
@@ -35,7 +34,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     TokenStore tokenStore;
 
     @Resource
-    JwtAccessTokenConverter accessTokenConverter;
+    SMJwtAccessTokenConverter accessTokenConverter;
     /**
      * 密码编码器
      */
