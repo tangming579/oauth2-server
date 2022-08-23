@@ -1,28 +1,14 @@
 package com.tm.auth.config;
 
-import com.tm.auth.common.converter.CustomJwtAccessTokenConverter;
+import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
+import com.tm.auth.common.gm.SM2JwtTokenStore;
+import com.tm.auth.common.gmUtils.SM2Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.annotation.Resource;
-import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author tangming
@@ -43,9 +29,7 @@ public class AccessTokenConfig {
      */
     @Bean
     TokenStore tokenStore() {
-        //return new InMemoryTokenStore();
-        return new JwtTokenStore(jwtAccessTokenConverter());
-        //return new JwkTokenStore("http://localhost:8080/authorization-server/.well-known/jwks.json");
+        return new SM2JwtTokenStore(jwtAccessTokenConverter());
     }
 
 
@@ -55,8 +39,8 @@ public class AccessTokenConfig {
      * 然后再存储到TokenStore对象，外界需要时，会从tokenStore进行获取。
      */
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new CustomJwtAccessTokenConverter();
+    public SM2JwtAccessTokenConverter jwtAccessTokenConverter() {
+        SM2JwtAccessTokenConverter jwtAccessTokenConverter = new SM2JwtAccessTokenConverter();
         //非对称加密签名
         jwtAccessTokenConverter.setKeyPair(this.keyPair);
         return jwtAccessTokenConverter;
@@ -64,23 +48,9 @@ public class AccessTokenConfig {
 
     @Bean
     public KeyPair keyPair() {
-        //获取资源文件中的密钥
-        ClassPathResource ksFile = new ClassPathResource("jwt.jks");
-        //输入密码创建KeyStoreKeyFactory
-        KeyStoreKeyFactory ksFactory = new KeyStoreKeyFactory(ksFile, "password".toCharArray());
-        //通过别名获取KeyPair
-        KeyPair keyPair1 = ksFactory.getKeyPair("oauth-jwt");
-        String publicKey = ((RSAPublicKey) keyPair1.getPublic()).getEncoded().toString();
-        String privateKey = keyPair1.getPrivate().getEncoded().toString();
-        return ksFactory.getKeyPair("oauth-jwt");
-    }
-
-    public static PrivateKey getPrivateKey(byte[] keyBytes) {
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-            return privateKey;
+            KeyPair KeyPair = SM2Util.generateKeyPair();
+            return KeyPair;
         } catch (Exception e) {
             return null;
         }
@@ -95,14 +65,4 @@ public class AccessTokenConfig {
 //        //（默认编码器id，编码器map）
 //        return new DelegatingPasswordEncoder(idForEncode,encoders);
 //    }
-
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new CustomJwtAccessTokenConverter();
-        //非对称加密签名
-        converter.setKeyPair(keyPair);
-        //对称加密签名
-        //converter.setSigningKey("xxx");
-        return converter;
-    }
 }
