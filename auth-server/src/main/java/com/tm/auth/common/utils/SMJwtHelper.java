@@ -20,6 +20,19 @@ import java.util.Map;
 public class SMJwtHelper {
     private static final byte JWT_PART_SEPARATOR = (byte) 46;
 
+    /**
+     * 解码token并签名校验
+     *
+     * @param token
+     * @param verifier
+     * @return
+     */
+    public static Jwt decodeAndVerify(String token, SignatureVerifier verifier) {
+        Jwt jwt = decode(token);
+        jwt.verifySignature(verifier);
+        return jwt;
+    }
+
     public static Jwt decode(String token) {
         int firstPeriod = token.indexOf(JWT_PART_SEPARATOR);
         int lastPeriod = token.lastIndexOf(JWT_PART_SEPARATOR);
@@ -30,36 +43,31 @@ public class SMJwtHelper {
             byte[] payload = Codecs.b64UrlDecode(buffer);
             buffer.limit(token.length()).position(lastPeriod + 1);
             byte[] signature = Codecs.b64UrlDecode(buffer);
-
             return new SM2JwtImpl(header, payload, signature);
         } else {
             throw new IllegalArgumentException("JWT must have 3 tokens");
         }
     }
 
-    public static Jwt decodeAndVerify(String token, SignatureVerifier verifier) {
-        Jwt jwt = decode(token);
-        jwt.verifySignature(verifier);
-        return jwt;
-
-    }
-
+    /**
+     * 将编码为jwt
+     *
+     * @param content
+     * @param signer
+     * @return
+     */
     public static String encode(CharSequence content, Signer signer) {
-        return encode(content, signer, Collections.emptyMap());
-    }
-
-    public static String encode(CharSequence content, Signer signer, Map<String, String> headers) {
         byte[] claims = Codecs.utf8Encode(content);
         byte[] headerBytes = createHeader().getBytes();
 
-        String header = Base64.encodeBase64URLSafeString(headerBytes);
-        String payload = Base64.encodeBase64URLSafeString(claims);
+        String headerBase64 = Base64.encodeBase64URLSafeString(headerBytes);
+        String payloadBase64 = Base64.encodeBase64URLSafeString(claims);
 
-        byte[] payloadBytes = Codecs.b64UrlEncode(claims);
-        byte[] signByte = combineSignByte(headerBytes, payloadBytes);
-        byte[] signatureBytes = signer.sign(signByte);
-        String signature = Base64.encodeBase64URLSafeString(signatureBytes);
-        return String.format("%s.%s.%s", header, payload, signature);
+        byte[] combineSignByte = combineSignByte(headerBase64.getBytes(), payloadBase64.getBytes());
+        byte[] signatureBytes = signer.sign(combineSignByte);
+
+        String signatureBase64 = Base64.encodeBase64URLSafeString(signatureBytes);
+        return String.format("%s.%s.%s", headerBase64, payloadBase64, signatureBase64);
     }
 
     /**
