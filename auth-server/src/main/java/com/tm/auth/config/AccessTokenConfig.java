@@ -65,12 +65,4 @@ public class AccessTokenConfig {
 //        //（默认编码器id，编码器map）
 //        return new DelegatingPasswordEncoder(idForEncode,encoders);
 //    }
-
-    @Bean
-    public SM2JwtAccessTokenConverter accessTokenConverter() {
-        SM2JwtAccessTokenConverter converter = new SM2JwtAccessTokenConverter();
-        //非对称加密签名
-        converter.setKeyPair(keyPair);
-        return converter;
-    }
 }

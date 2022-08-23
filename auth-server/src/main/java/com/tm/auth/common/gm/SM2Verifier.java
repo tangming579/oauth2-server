@@ -28,7 +28,7 @@ public class SM2Verifier implements SignatureVerifier {
     /**
      * 校验签名
      *
-     * @param content 内容
+     * @param content 内容 base64(header)+base64(payload)
      * @param sig     签名
      */
     @Override

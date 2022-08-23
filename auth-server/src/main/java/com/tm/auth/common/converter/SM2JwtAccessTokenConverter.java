@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.util.Assert;
 
 import java.security.KeyPair;
@@ -37,12 +38,11 @@ import java.util.Map;
 
 public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter, InitializingBean {
     public static final String TOKEN_ID = "jti";
-    public static final String ACCESS_TOKEN_ID = "ati";
+    public static final String TOKEN_EXP = "exp";
     private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
     private JsonParser objectMapper = JsonParserFactory.create();
     private String verifierKey = (new RandomValueStringGenerator()).generate();
     private Signer signer;
-    private String signingKey;
     private SignatureVerifier verifier;
 
     /**
@@ -61,8 +61,8 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
 
         Map<String, Object> info = new LinkedHashMap(accessToken.getAdditionalInformation());
         String tokenId = result.getValue();
-        if (!info.containsKey("jti")) {
-            info.put("jti", tokenId);
+        if (!info.containsKey(TOKEN_ID)) {
+            info.put(TOKEN_ID, tokenId);
         }
         result.setAdditionalInformation(info);
         result.setValue(this.encode(result, authentication));
@@ -104,28 +104,24 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         String content;
         try {
             content = this.objectMapper.formatMap(this.tokenConverter.convertAccessToken(accessToken, authentication));
+            return SMJwtHelper.encode(content, this.signer);
         } catch (Exception e) {
             throw new IllegalStateException("Cannot convert access token to JSON", e);
         }
-
-        String token = SMJwtHelper.encode(content, this.signer);
-        return token;
     }
 
     public Map<String, Object> decode(String token) {
         try {
-            Jwt jwt = JwtHelper.decodeAndVerify(token, this.verifier);
+            Jwt jwt = SMJwtHelper.decodeAndVerify(token, this.verifier);
             String claimsStr = jwt.getClaims();
             Map<String, Object> claims = this.objectMapper.parseMap(claimsStr);
-            if (claims.containsKey("exp") && claims.get("exp") instanceof Integer) {
-                Integer intValue = (Integer) claims.get("exp");
-                claims.put("exp", new Long((long) intValue));
+            if (claims.containsKey(TOKEN_EXP) && claims.get(TOKEN_EXP) instanceof Integer) {
+                Integer intValue = (Integer) claims.get(TOKEN_EXP);
+                claims.put(TOKEN_EXP, new Long((long) intValue));
             }
-
-            //this.getJwtClaimsSetVerifier().verify(claims);
             return claims;
         } catch (Exception e) {
-            throw new InvalidTokenException("Cannot convert access token to JSON", e);
+            throw new RuntimeException("Cannot convert access token to JSON", e);
         }
     }
 

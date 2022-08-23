@@ -1,7 +1,8 @@
 package com.tm.auth.common.utils;
 
+import com.tm.auth.po.SM2JwtImpl;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.security.jwt.JwtAlgorithms;
+import org.springframework.security.jwt.*;
 import org.springframework.security.jwt.codec.Codecs;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.jwt.crypto.sign.Signer;
@@ -18,6 +19,30 @@ import java.util.Map;
  */
 public class SMJwtHelper {
     private static final byte JWT_PART_SEPARATOR = (byte) 46;
+
+    public static Jwt decode(String token) {
+        int firstPeriod = token.indexOf(JWT_PART_SEPARATOR);
+        int lastPeriod = token.lastIndexOf(JWT_PART_SEPARATOR);
+        if (firstPeriod > 0 && lastPeriod > firstPeriod) {
+            CharBuffer buffer = CharBuffer.wrap(token, 0, firstPeriod);
+            byte[] header = Codecs.b64UrlDecode(buffer);
+            buffer.limit(lastPeriod).position(firstPeriod + 1);
+            byte[] payload = Codecs.b64UrlDecode(buffer);
+            buffer.limit(token.length()).position(lastPeriod + 1);
+            byte[] signature = Codecs.b64UrlDecode(buffer);
+
+            return new SM2JwtImpl(header, payload, signature);
+        } else {
+            throw new IllegalArgumentException("JWT must have 3 tokens");
+        }
+    }
+
+    public static Jwt decodeAndVerify(String token, SignatureVerifier verifier) {
+        Jwt jwt = decode(token);
+        jwt.verifySignature(verifier);
+        return jwt;
+
+    }
 
     public static String encode(CharSequence content, Signer signer) {
         return encode(content, signer, Collections.emptyMap());
