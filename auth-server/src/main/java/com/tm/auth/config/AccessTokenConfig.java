@@ -5,6 +5,7 @@ import com.tm.auth.common.gm.SM2JwtTokenStore;
 import com.tm.auth.common.gmUtils.SM2Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.annotation.Resource;

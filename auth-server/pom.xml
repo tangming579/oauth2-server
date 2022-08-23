@@ -23,6 +23,7 @@
         <spring-cloud.version>2020.0.2</spring-cloud.version>
         <nimbus.jose.jwt.version>8.16</nimbus.jose.jwt.version>
         <security.jwt.version>1.0.10.RELEASE</security.jwt.version>
+        <pagehelper.version>1.2.10</pagehelper.version>
     </properties>
     <dependencies>
         <dependency>
@@ -113,6 +114,11 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
             <version>1.67</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
         </dependency>
     </dependencies>
 
