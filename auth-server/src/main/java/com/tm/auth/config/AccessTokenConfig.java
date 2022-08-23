@@ -1,23 +1,14 @@
 package com.tm.auth.config;
 
-import com.tm.auth.common.converter.SMJwtAccessTokenConverter;
+import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.common.gm.SM2JwtTokenStore;
 import com.tm.auth.common.gmUtils.SM2Util;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.annotation.Resource;
-import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
 
 /**
  * @author tangming
@@ -48,8 +39,8 @@ public class AccessTokenConfig {
      * 然后再存储到TokenStore对象，外界需要时，会从tokenStore进行获取。
      */
     @Bean
-    public SMJwtAccessTokenConverter jwtAccessTokenConverter() {
-        SMJwtAccessTokenConverter jwtAccessTokenConverter = new SMJwtAccessTokenConverter();
+    public SM2JwtAccessTokenConverter jwtAccessTokenConverter() {
+        SM2JwtAccessTokenConverter jwtAccessTokenConverter = new SM2JwtAccessTokenConverter();
         //非对称加密签名
         jwtAccessTokenConverter.setKeyPair(this.keyPair);
         return jwtAccessTokenConverter;
@@ -76,8 +67,8 @@ public class AccessTokenConfig {
 //    }
 
     @Bean
-    public SMJwtAccessTokenConverter accessTokenConverter() {
-        SMJwtAccessTokenConverter converter = new SMJwtAccessTokenConverter();
+    public SM2JwtAccessTokenConverter accessTokenConverter() {
+        SM2JwtAccessTokenConverter converter = new SM2JwtAccessTokenConverter();
         //非对称加密签名
         converter.setKeyPair(keyPair);
         return converter;

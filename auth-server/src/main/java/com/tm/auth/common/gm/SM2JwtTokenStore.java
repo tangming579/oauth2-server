@@ -1,17 +1,14 @@
 package com.tm.auth.common.gm;
 
-import com.tm.auth.common.converter.SMJwtAccessTokenConverter;
+import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.common.DefaultExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.approval.Approval;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import java.util.*;
 
@@ -20,10 +17,10 @@ import java.util.*;
  * @date 2022/8/22
  */
 public class SM2JwtTokenStore implements TokenStore {
-    private SMJwtAccessTokenConverter jwtTokenEnhancer;
+    private SM2JwtAccessTokenConverter jwtTokenEnhancer;
     private ApprovalStore approvalStore;
 
-    public SM2JwtTokenStore(SMJwtAccessTokenConverter jwtTokenEnhancer) {
+    public SM2JwtTokenStore(SM2JwtAccessTokenConverter jwtTokenEnhancer) {
         this.jwtTokenEnhancer = jwtTokenEnhancer;
     }
 
@@ -112,7 +109,7 @@ public class SM2JwtTokenStore implements TokenStore {
         return Collections.emptySet();
     }
 
-    public void setTokenEnhancer(SMJwtAccessTokenConverter tokenEnhancer) {
+    public void setTokenEnhancer(SM2JwtAccessTokenConverter tokenEnhancer) {
         this.jwtTokenEnhancer = tokenEnhancer;
     }
 

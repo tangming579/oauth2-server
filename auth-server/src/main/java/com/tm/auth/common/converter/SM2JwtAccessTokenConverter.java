@@ -3,8 +3,6 @@ package com.tm.auth.common.converter;
 import com.tm.auth.common.gm.SM2Signer;
 import com.tm.auth.common.gm.SM2Verifier;
 import com.tm.auth.common.utils.SMJwtHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.springframework.beans.factory.InitializingBean;
@@ -27,18 +25,17 @@ import org.springframework.util.Assert;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 自定义访问令牌转换器
+ * SM2算法的 JWT 令牌转换器
  *
  * @author: tangming
  * @date: 2022-08-14
  */
 
-public class SMJwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter, InitializingBean {
+public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter, InitializingBean {
     public static final String TOKEN_ID = "jti";
     public static final String ACCESS_TOKEN_ID = "ati";
     private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
@@ -107,8 +104,8 @@ public class SMJwtAccessTokenConverter implements TokenEnhancer, AccessTokenConv
         String content;
         try {
             content = this.objectMapper.formatMap(this.tokenConverter.convertAccessToken(accessToken, authentication));
-        } catch (Exception var5) {
-            throw new IllegalStateException("Cannot convert access token to JSON", var5);
+        } catch (Exception e) {
+            throw new IllegalStateException("Cannot convert access token to JSON", e);
         }
 
         String token = SMJwtHelper.encode(content, this.signer);
@@ -127,8 +124,8 @@ public class SMJwtAccessTokenConverter implements TokenEnhancer, AccessTokenConv
 
             //this.getJwtClaimsSetVerifier().verify(claims);
             return claims;
-        } catch (Exception var6) {
-            throw new InvalidTokenException("Cannot convert access token to JSON", var6);
+        } catch (Exception e) {
+            throw new InvalidTokenException("Cannot convert access token to JSON", e);
         }
     }
 
