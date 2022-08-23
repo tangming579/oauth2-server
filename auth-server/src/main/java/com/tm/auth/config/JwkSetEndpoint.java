@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @FrameworkEndpoint
 class JwkSetEndpoint {
-
     @Resource
     private KeyPair keyPair;
 

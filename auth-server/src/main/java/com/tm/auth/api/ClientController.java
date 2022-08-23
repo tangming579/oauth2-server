@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/auth/client")
 @Slf4j
-public class AppManagementController {
+public class ClientController {
 
     @Resource
     ClientDetailsServiceImpl oAuthClientService;

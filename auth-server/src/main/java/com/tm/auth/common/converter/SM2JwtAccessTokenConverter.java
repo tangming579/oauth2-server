@@ -36,7 +36,7 @@ import java.util.Map;
  * @date: 2022-08-14
  */
 
-public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter, InitializingBean {
+public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter {
     public static final String TOKEN_ID = "jti";
     public static final String TOKEN_EXP = "exp";
     private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
@@ -57,7 +57,7 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(accessToken);
 
         // 将用户信息添加到token额外信息中
-        result.getAdditionalInformation().put("test", "自定义信息");
+        //result.getAdditionalInformation().put("test", "自定义信息");
 
         Map<String, Object> info = new LinkedHashMap(accessToken.getAdditionalInformation());
         String tokenId = result.getValue();
@@ -101,9 +101,8 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
     }
 
     protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        String content;
         try {
-            content = this.objectMapper.formatMap(this.tokenConverter.convertAccessToken(accessToken, authentication));
+            String content = this.objectMapper.formatMap(this.tokenConverter.convertAccessToken(accessToken, authentication));
             return SMJwtHelper.encode(content, this.signer);
         } catch (Exception e) {
             throw new IllegalStateException("Cannot convert access token to JSON", e);
@@ -123,10 +122,5 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         } catch (Exception e) {
             throw new RuntimeException("Cannot convert access token to JSON", e);
         }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
     }
 }
