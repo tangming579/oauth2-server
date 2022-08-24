@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 @RequestMapping("/auth/client")
 @Slf4j
 public class ClientController {
-
     @Resource
     ClientDetailsServiceImpl oAuthClientService;
 
