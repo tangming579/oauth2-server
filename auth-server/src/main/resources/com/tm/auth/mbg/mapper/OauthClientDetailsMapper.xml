@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tm.auth.mbg.mapper.OauthClientDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.tm.auth.mbg.model.OauthClientDetails">
+    <id column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="client_secret" jdbcType="VARCHAR" property="clientSecret" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity" />
+    <result column="client_desc" jdbcType="VARCHAR" property="clientDesc" />
+    <result column="jwt_public_key" jdbcType="VARCHAR" property="jwtPublicKey" />
+    <result column="jwt_private_key" jdbcType="VARCHAR" property="jwtPrivateKey" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    client_id, client_secret, client_name, access_token_validity, client_desc, jwt_public_key, 
+    jwt_private_key, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from `public`.`oauth_client_details`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `public`.`oauth_client_details`
+    where client_id = #{clientId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from `public`.`oauth_client_details`
+    where client_id = #{clientId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample">
+    delete from `public`.`oauth_client_details`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
+    insert into `public`.`oauth_client_details` (client_id, client_secret, client_name, 
+      access_token_validity, client_desc, jwt_public_key, 
+      jwt_private_key, create_time)
+    values (#{clientId,jdbcType=VARCHAR}, #{clientSecret,jdbcType=VARCHAR}, #{clientName,jdbcType=VARCHAR}, 
+      #{accessTokenValidity,jdbcType=INTEGER}, #{clientDesc,jdbcType=VARCHAR}, #{jwtPublicKey,jdbcType=VARCHAR}, 
+      #{jwtPrivateKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
+    insert into `public`.`oauth_client_details`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="clientSecret != null">
+        client_secret,
+      </if>
+      <if test="clientName != null">
+        client_name,
+      </if>
+      <if test="accessTokenValidity != null">
+        access_token_validity,
+      </if>
+      <if test="clientDesc != null">
+        client_desc,
+      </if>
+      <if test="jwtPublicKey != null">
+        jwt_public_key,
+      </if>
+      <if test="jwtPrivateKey != null">
+        jwt_private_key,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clientId != null">
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSecret != null">
+        #{clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="accessTokenValidity != null">
+        #{accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="clientDesc != null">
+        #{clientDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="jwtPublicKey != null">
+        #{jwtPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="jwtPrivateKey != null">
+        #{jwtPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample" resultType="java.lang.Long">
+    select count(*) from `public`.`oauth_client_details`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update `public`.`oauth_client_details`
+    <set>
+      <if test="record.clientId != null">
+        client_id = #{record.clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientSecret != null">
+        client_secret = #{record.clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientName != null">
+        client_name = #{record.clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessTokenValidity != null">
+        access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="record.clientDesc != null">
+        client_desc = #{record.clientDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jwtPublicKey != null">
+        jwt_public_key = #{record.jwtPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jwtPrivateKey != null">
+        jwt_private_key = #{record.jwtPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update `public`.`oauth_client_details`
+    set client_id = #{record.clientId,jdbcType=VARCHAR},
+      client_secret = #{record.clientSecret,jdbcType=VARCHAR},
+      client_name = #{record.clientName,jdbcType=VARCHAR},
+      access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      client_desc = #{record.clientDesc,jdbcType=VARCHAR},
+      jwt_public_key = #{record.jwtPublicKey,jdbcType=VARCHAR},
+      jwt_private_key = #{record.jwtPrivateKey,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
+    update `public`.`oauth_client_details`
+    <set>
+      <if test="clientSecret != null">
+        client_secret = #{clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="accessTokenValidity != null">
+        access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="clientDesc != null">
+        client_desc = #{clientDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="jwtPublicKey != null">
+        jwt_public_key = #{jwtPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="jwtPrivateKey != null">
+        jwt_private_key = #{jwtPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where client_id = #{clientId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
+    update `public`.`oauth_client_details`
+    set client_secret = #{clientSecret,jdbcType=VARCHAR},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      client_desc = #{clientDesc,jdbcType=VARCHAR},
+      jwt_public_key = #{jwtPublicKey,jdbcType=VARCHAR},
+      jwt_private_key = #{jwtPrivateKey,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where client_id = #{clientId,jdbcType=VARCHAR}
+  </update>
+</mapper>

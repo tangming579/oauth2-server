@@ -35,10 +35,8 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
-            log.info("查找auth对象 ---> clientId={}", clientId);
             Optional<OAuthClient> oAuthClientOptional = oAuthClientDao.findByClientId(clientId);
             ClientDetails clientDetails = oAuthClientOptional.get();
-            log.info("查找auth对象 ---> 完成, clientDetails={}", clientDetails);
             return clientDetails;
         } catch (Exception e) {
             throw new NoSuchClientException("No client with requested id: " + clientId);

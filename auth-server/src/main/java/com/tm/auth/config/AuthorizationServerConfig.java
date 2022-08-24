@@ -2,7 +2,6 @@ package com.tm.auth.config;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.service.ClientDetailsServiceImpl;
-import com.tm.auth.service.CustomTokenServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -98,7 +97,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     AuthorizationServerTokenServices tokenServices() {
-        DefaultTokenServices services = new CustomTokenServices();
+        DefaultTokenServices services = new DefaultTokenServices();
         // 客户端服务
         services.setClientDetailsService(clientService);
         // 存储令牌方式

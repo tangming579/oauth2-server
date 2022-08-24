@@ -24,4 +24,25 @@ public class ClientController {
         oAuthClientService.create(oAuthClient);
         return "添加成功";
     }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestBody OAuthClient oAuthClient) {
+        oAuthClientService.create(oAuthClient);
+        return "添加成功";
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public String update(@RequestBody OAuthClient oAuthClient) {
+        oAuthClientService.create(oAuthClient);
+        return "添加成功";
+    }
+
+    @PostMapping("/list")
+    @ResponseBody
+    public String list(@RequestBody OAuthClient oAuthClient) {
+        oAuthClientService.create(oAuthClient);
+        return "添加成功";
+    }
 }
