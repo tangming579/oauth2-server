@@ -1,8 +1,9 @@
 package com.tm.auth.service;
 
-import com.tm.auth.dao.OAuthClientDao;
+import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.po.OAuthClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -21,10 +22,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class ClientDetailsServiceImpl implements ClientDetailsService {
-
-    @Resource
-    OAuthClientDao oAuthClientDao;
-
     /**
      * 获取授权id
      *
@@ -35,9 +32,14 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
-            Optional<OAuthClient> oAuthClientOptional = oAuthClientDao.findByClientId(clientId);
-            ClientDetails clientDetails = oAuthClientOptional.get();
-            return clientDetails;
+            ClientService clientService = new ClientService();
+            OauthClientDetails clientDetails = clientService.findClientById(clientId);
+            OAuthClient oAuthClient = new OAuthClient();
+            oAuthClient.setClientId(clientDetails.getClientId());
+            oAuthClient.setClientSecret(oAuthClient.getClientSecret());
+            oAuthClient.setAccessTokenValiditySeconds(oAuthClient.getAccessTokenValiditySeconds());
+            oAuthClient.setAuthorizedGrantTypes("client_credentials");
+            return oAuthClient;
         } catch (Exception e) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
@@ -46,6 +48,5 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     public void create(OAuthClient client) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
-        oAuthClientDao.save(client);
     }
 }
