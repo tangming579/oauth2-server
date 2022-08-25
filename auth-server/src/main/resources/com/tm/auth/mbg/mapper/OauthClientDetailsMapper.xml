@@ -79,7 +79,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `public`.`oauth_client_details`
+    from public.oauth_client_details
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,21 +90,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `public`.`oauth_client_details`
+    from public.oauth_client_details
     where client_id = #{clientId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from `public`.`oauth_client_details`
+    delete from public.oauth_client_details
     where client_id = #{clientId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample">
-    delete from `public`.`oauth_client_details`
+    delete from public.oauth_client_details
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
-    insert into `public`.`oauth_client_details` (client_id, client_secret, client_name, 
+    insert into public.oauth_client_details (client_id, client_secret, client_name, 
       access_token_validity, client_desc, jwt_public_key, 
       jwt_private_key, create_time)
     values (#{clientId,jdbcType=VARCHAR}, #{clientSecret,jdbcType=VARCHAR}, #{clientName,jdbcType=VARCHAR}, 
@@ -112,7 +112,7 @@
       #{jwtPrivateKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
-    insert into `public`.`oauth_client_details`
+    insert into public.oauth_client_details
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="clientId != null">
         client_id,
@@ -167,13 +167,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample" resultType="java.lang.Long">
-    select count(*) from `public`.`oauth_client_details`
+    select count(*) from public.oauth_client_details
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `public`.`oauth_client_details`
+    update public.oauth_client_details
     <set>
       <if test="record.clientId != null">
         client_id = #{record.clientId,jdbcType=VARCHAR},
@@ -205,7 +205,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `public`.`oauth_client_details`
+    update public.oauth_client_details
     set client_id = #{record.clientId,jdbcType=VARCHAR},
       client_secret = #{record.clientSecret,jdbcType=VARCHAR},
       client_name = #{record.clientName,jdbcType=VARCHAR},
@@ -219,7 +219,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
-    update `public`.`oauth_client_details`
+    update public.oauth_client_details
     <set>
       <if test="clientSecret != null">
         client_secret = #{clientSecret,jdbcType=VARCHAR},
@@ -246,7 +246,7 @@
     where client_id = #{clientId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
-    update `public`.`oauth_client_details`
+    update public.oauth_client_details
     set client_secret = #{clientSecret,jdbcType=VARCHAR},
       client_name = #{clientName,jdbcType=VARCHAR},
       access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},

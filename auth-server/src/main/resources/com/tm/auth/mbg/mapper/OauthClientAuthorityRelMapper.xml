@@ -73,7 +73,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `public`.`oauth_client_authority_rel`
+    from public.oauth_client_authority_rel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,27 +84,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `public`.`oauth_client_authority_rel`
+    from public.oauth_client_authority_rel
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from `public`.`oauth_client_authority_rel`
+    delete from public.oauth_client_authority_rel
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRelExample">
-    delete from `public`.`oauth_client_authority_rel`
+    delete from public.oauth_client_authority_rel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    insert into `public`.`oauth_client_authority_rel` (id, client_id, authority_id
+    insert into public.oauth_client_authority_rel (id, client_id, authority_id
       )
     values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    insert into `public`.`oauth_client_authority_rel`
+    insert into public.oauth_client_authority_rel
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -129,13 +129,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRelExample" resultType="java.lang.Long">
-    select count(*) from `public`.`oauth_client_authority_rel`
+    select count(*) from public.oauth_client_authority_rel
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `public`.`oauth_client_authority_rel`
+    update public.oauth_client_authority_rel
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -152,7 +152,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `public`.`oauth_client_authority_rel`
+    update public.oauth_client_authority_rel
     set id = #{record.id,jdbcType=BIGINT},
       client_id = #{record.clientId,jdbcType=VARCHAR},
       authority_id = #{record.authorityId,jdbcType=VARCHAR}
@@ -161,7 +161,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    update `public`.`oauth_client_authority_rel`
+    update public.oauth_client_authority_rel
     <set>
       <if test="clientId != null">
         client_id = #{clientId,jdbcType=VARCHAR},
@@ -173,7 +173,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    update `public`.`oauth_client_authority_rel`
+    update public.oauth_client_authority_rel
     set client_id = #{clientId,jdbcType=VARCHAR},
       authority_id = #{authorityId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

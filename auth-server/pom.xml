@@ -19,7 +19,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <security.oauth2.version>2.5.0.RELEASE</security.oauth2.version>
         <security.oauth2.autoconfigure.version>2.3.0.RELEASE</security.oauth2.autoconfigure.version>
-        <mysql.version>8.0.25</mysql.version>
         <spring-cloud.version>2020.0.2</spring-cloud.version>
         <nimbus.jose.jwt.version>8.16</nimbus.jose.jwt.version>
         <security.jwt.version>1.0.10.RELEASE</security.jwt.version>

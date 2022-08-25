@@ -74,7 +74,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `public`.`oauth_authority`
+    from public.oauth_authority
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,27 +85,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `public`.`oauth_authority`
+    from public.oauth_authority
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from `public`.`oauth_authority`
+    delete from public.oauth_authority
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthAuthorityExample">
-    delete from `public`.`oauth_authority`
+    delete from public.oauth_authority
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    insert into `public`.`oauth_authority` (id, client_id, methods, 
+    insert into public.oauth_authority (id, client_id, methods, 
       paths)
     values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR}, 
       #{paths,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    insert into `public`.`oauth_authority`
+    insert into public.oauth_authority
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -136,13 +136,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthAuthorityExample" resultType="java.lang.Long">
-    select count(*) from `public`.`oauth_authority`
+    select count(*) from public.oauth_authority
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `public`.`oauth_authority`
+    update public.oauth_authority
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -162,7 +162,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `public`.`oauth_authority`
+    update public.oauth_authority
     set id = #{record.id,jdbcType=BIGINT},
       client_id = #{record.clientId,jdbcType=VARCHAR},
       methods = #{record.methods,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    update `public`.`oauth_authority`
+    update public.oauth_authority
     <set>
       <if test="clientId != null">
         client_id = #{clientId,jdbcType=VARCHAR},
@@ -187,7 +187,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    update `public`.`oauth_authority`
+    update public.oauth_authority
     set client_id = #{clientId,jdbcType=VARCHAR},
       methods = #{methods,jdbcType=VARCHAR},
       paths = #{paths,jdbcType=VARCHAR}

@@ -25,10 +25,9 @@
         </commentGenerator>
         <!--配置数据库连接-->
         <jdbcConnection driverClass="org.postgresql.Driver"
-                        connectionURL="jdbc:postgresql://127.0.0.1:5432/paas_base_auth_server"
+                        connectionURL="jdbc:postgresql://127.0.0.1:5432/paas_base_auth_server?currentSchema=public"
                         userId="postgres"
                         password="123456">
-            <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
             <property name="nullCatalogMeansCurrent" value="true" />
         </jdbcConnection>
         <!--指定生成model的路径-->
@@ -40,8 +39,8 @@
                              targetProject="src\main\java"/>
 
         <!--生成全部表tableName设为%-->
-        <table schema="public" tableName="oauth_client_details" delimitIdentifiers="true"/>
-        <table schema="public" tableName="oauth_authority" delimitIdentifiers="true"/>
-        <table schema="public" tableName="oauth_client_authority_rel" delimitIdentifiers="true"/>
+        <table schema="public" tableName="oauth_client_details" delimitIdentifiers="false"/>
+        <table schema="public" tableName="oauth_authority" delimitIdentifiers="false"/>
+        <table schema="public" tableName="oauth_client_authority_rel" delimitIdentifiers="false"/>
     </context>
 </generatorConfiguration>

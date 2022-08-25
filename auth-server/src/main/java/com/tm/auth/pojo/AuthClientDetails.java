@@ -1,7 +1,6 @@
-package com.tm.auth.po;
+package com.tm.auth.pojo;
 
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
@@ -11,11 +10,10 @@ import java.util.*;
 
 /**
  * @author tangming
- * @date 2022/8/11
+ * @date 2022/8/25
  */
 @Data
-@ToString
-public class OAuthClient implements ClientDetails {
+public class AuthClientDetails implements ClientDetails {
     /**
      * 客户端ID
      */
@@ -69,13 +67,13 @@ public class OAuthClient implements ClientDetails {
 
     @Override
     public boolean isSecretRequired() {
-        return this.clientSecret != null;
+        return true;
     }
 
     @Override
 
     public boolean isScoped() {
-        return this.scope != null && !this.scope.isEmpty();
+        return true;
     }
 
     @Override
@@ -95,6 +93,11 @@ public class OAuthClient implements ClientDetails {
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return new HashSet<>(Arrays.asList(this.authorizedGrantTypes.split(",")));
+        return new HashSet<>(Collections.singletonList("client_credentials"));
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        return Collections.EMPTY_LIST;
     }
 }
