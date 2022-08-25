@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class AuthClientService {
 
     public ClientDetails getClientDetails(String clientId) {
         OauthClientDetails oauthClientDetails = findClientById(clientId);
-        ClientDetails clientDetails = new AuthClientDetails();
+        AuthClientDetails clientDetails = new AuthClientDetails();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
         return clientDetails;
     }

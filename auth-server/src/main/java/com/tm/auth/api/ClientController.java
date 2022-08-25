@@ -17,13 +17,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/oauth/client")
-@Api(value = "client")
+@Api("应用管理")
 @Slf4j
 public class ClientController {
     @Autowired
     private AuthClientService clientService;
 
-    @ApiOperation("创建App")
+    @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
     public String create(@RequestBody OauthClientDetails oauthClientDetails) {
@@ -31,6 +31,7 @@ public class ClientController {
         return "添加成功";
     }
 
+    @ApiOperation("删除应用")
     @PostMapping("/delete")
     @ResponseBody
     public String delete(String clientId) {
@@ -38,18 +39,23 @@ public class ClientController {
         return "添加成功";
     }
 
+    @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
     public void update(@RequestBody AuthClientRequest authClientRequest) {
 
     }
 
+    @ApiOperation("应用列表")
     @PostMapping("/list")
     @ResponseBody
     public List<OauthClientDetails> list() {
         return clientService.getList();
     }
 
+    @ApiOperation("修改应用权限")
+    @PostMapping("/authorities")
+    @ResponseBody
     public void authorities() {
 
     }

@@ -27,13 +27,6 @@ public class AuthClientDetails implements ClientDetails {
     private String clientSecret;
 
     /**
-     * 权限范围
-     * read，write等可自定义
-     */
-    @NotNull(message = "授权范围不能为空")
-    private Set<String> scope = new LinkedHashSet<>(0);
-
-    /**
      * 资源id集合
      */
     @NotNull(message = "授权范围不能为空")
@@ -73,7 +66,12 @@ public class AuthClientDetails implements ClientDetails {
     @Override
 
     public boolean isScoped() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public Set<String> getScope() {
+        return new HashSet<>(Collections.singletonList("all"));
     }
 
     @Override
