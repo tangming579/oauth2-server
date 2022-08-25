@@ -1,5 +1,7 @@
 package com.tm.auth.service;
 
+import com.github.pagehelper.PageHelper;
+import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
@@ -27,22 +29,32 @@ public class AuthClientService {
         return oauthClientDetailsMapper.insert(oauthClientDetails);
     }
 
-    public OauthClientDetails findClientById(String clientId) {
-        return oauthClientDetailsMapper.selectByPrimaryKey(clientId);
+    public int updateClient(OauthClientDetails oauthClientDetails) {
+        return oauthClientDetailsMapper.updateByPrimaryKey(oauthClientDetails);
     }
 
     public int deleteClient(String clientId) {
         return oauthClientDetailsMapper.deleteByPrimaryKey(clientId);
     }
 
+    public OauthClientDetails getClient(String clientId) {
+        return oauthClientDetailsMapper.selectByPrimaryKey(clientId);
+    }
+
     public ClientDetails getClientDetails(String clientId) {
-        OauthClientDetails oauthClientDetails = findClientById(clientId);
+        OauthClientDetails oauthClientDetails = getClient(clientId);
         AuthClientDetails clientDetails = new AuthClientDetails();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
         return clientDetails;
     }
 
-    public List<OauthClientDetails> getList() {
+    public List<OauthClientDetails> listAllClient() {
         return oauthClientDetailsMapper.selectByExample(new OauthClientDetailsExample());
+    }
+
+    public CommonPage listPageClient(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<OauthClientDetails> list = oauthClientDetailsMapper.selectByExample(new OauthClientDetailsExample());
+        return CommonPage.restPage(list);
     }
 }

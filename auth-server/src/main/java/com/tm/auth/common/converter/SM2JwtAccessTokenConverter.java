@@ -65,6 +65,12 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         return result;
     }
 
+    /**
+     *
+     * @param oAuth2AccessToken
+     * @param oAuth2Authentication
+     * @return
+     */
     @Override
     public Map<String, ?> convertAccessToken(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
         return this.tokenConverter.convertAccessToken(oAuth2AccessToken, oAuth2Authentication);
@@ -82,6 +88,12 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         return this.tokenConverter.extractAccessToken(value, map);
     }
 
+    /**
+     * 认证信息
+     *
+     * @param map
+     * @return
+     */
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
         return this.tokenConverter.extractAuthentication(map);

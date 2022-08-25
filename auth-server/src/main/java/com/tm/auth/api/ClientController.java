@@ -1,5 +1,7 @@
 package com.tm.auth.api;
 
+import com.tm.auth.common.api.CommonPage;
+import com.tm.auth.common.api.CommonResult;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.dto.AuthClientRequest;
 import com.tm.auth.service.AuthClientService;
@@ -26,31 +28,29 @@ public class ClientController {
     @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
-    public String create(@RequestBody OauthClientDetails oauthClientDetails) {
-        clientService.createClient(oauthClientDetails);
-        return "添加成功";
+    public CommonResult create(@RequestBody OauthClientDetails oauthClientDetails) {
+        return CommonResult.success(clientService.createClient(oauthClientDetails));
     }
 
     @ApiOperation("删除应用")
     @PostMapping("/delete")
     @ResponseBody
-    public String delete(String clientId) {
-        clientService.deleteClient(clientId);
-        return "添加成功";
+    public CommonResult delete(String clientId) {
+        return CommonResult.success(clientService.deleteClient(clientId));
     }
 
     @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
-    public void update(@RequestBody AuthClientRequest authClientRequest) {
-
+    public CommonResult update(@RequestBody OauthClientDetails authClientRequest) {
+        return CommonResult.success(clientService.updateClient(authClientRequest));
     }
 
     @ApiOperation("应用列表")
     @PostMapping("/list")
     @ResponseBody
-    public List<OauthClientDetails> list() {
-        return clientService.getList();
+    public CommonPage list(int pageNum, int pageSize) {
+        return clientService.listPageClient(pageNum, pageSize);
     }
 
     @ApiOperation("修改应用权限")
