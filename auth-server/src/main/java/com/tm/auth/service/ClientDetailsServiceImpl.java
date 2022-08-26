@@ -1,15 +1,12 @@
 package com.tm.auth.service;
 
-import com.tm.auth.mbg.model.OauthClientDetails;
-import com.tm.auth.dto.AuthClientRequest;
+import com.tm.auth.common.api.OAuthExecption;
+import com.tm.auth.pojo.AuthClientDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,15 +29,12 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
-            ClientDetails clientDetails = clientService.getClientDetails(clientId);
+            AuthClientDetails clientDetails = clientService.getClientDetails(clientId);
+            if (clientDetails == null)
+                throw new OAuthExecption("No client with requested id: " + clientId);
             return clientDetails;
         } catch (Exception e) {
-            throw new NoSuchClientException("No client with requested id: " + clientId);
+            throw new OAuthExecption("loadClientByClientId error: " + e.getMessage());
         }
-    }
-
-    public void create(AuthClientRequest client) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
     }
 }

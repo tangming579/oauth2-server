@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -29,33 +30,20 @@ public class AuthClientRequest {
     private String clientSecret;
 
     /**
-     * 权限范围
-     * read，write等可自定义
+     * 客户端名称
      */
-    @NotNull(message = "授权范围不能为空")
-    private Set<String> scope = new LinkedHashSet<>(0);
+    private String clientName;
 
     /**
-     * 资源id集合
+     * 客户端描述
      */
-    @NotNull(message = "授权范围不能为空")
-    private Set<String> resourceIds = new LinkedHashSet<>(0);
+    private String clientDesc;
 
     /**
      * accessToken 有效时间
      * 单位:秒
      */
     @NotNull(message = "accessToken有效时间不能为空")
-    private Integer accessTokenValiditySeconds;
-
-    /**
-     * accessToken 刷新时间
-     * 单位:秒
-     */
-    private Integer refreshTokenValiditySeconds;
-
-    /**
-     * 指定客户端所拥有的Spring Security的权限值
-     */
-    private List<GrantedAuthority> authorities;
+    @Min(value = 60, message = "排序最小为60")
+    private Integer accessTokenValidity;
 }

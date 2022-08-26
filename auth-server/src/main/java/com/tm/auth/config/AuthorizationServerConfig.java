@@ -33,11 +33,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Resource
     SM2JwtAccessTokenConverter accessTokenConverter;
-    /**
-     * 密码编码器
-     */
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -107,7 +102,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 令牌有效期
         services.setAccessTokenValiditySeconds(60 * 60 * 2);
         // 支持令牌刷新
-        services.setSupportRefreshToken(true);
+        services.setSupportRefreshToken(false);
         // 刷新令牌有效期
         services.setRefreshTokenValiditySeconds(60 * 60 * 24 * 3);
         return services;

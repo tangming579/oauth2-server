@@ -57,6 +57,7 @@ public class AuthClientDetails implements ClientDetails {
      */
     private List<GrantedAuthority> authorities;
 
+    private String jwtPrivateKey;
 
     @Override
     public boolean isSecretRequired() {

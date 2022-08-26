@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -28,8 +29,8 @@ public class ClientController {
     @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
-    public CommonResult create(@RequestBody OauthClientDetails oauthClientDetails) {
-        return CommonResult.success(clientService.createClient(oauthClientDetails));
+    public CommonResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
+        return CommonResult.success(clientService.createClient(authClientRequest));
     }
 
     @ApiOperation("删除应用")
