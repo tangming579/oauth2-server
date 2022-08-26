@@ -1,4 +1,4 @@
-package com.tm.auth.common.gm;
+package com.tm.auth.common.gmJwt;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import org.springframework.security.core.Authentication;

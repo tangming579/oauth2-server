@@ -1,18 +1,13 @@
 package com.tm.auth.service;
 
-import com.tm.auth.dao.OAuthClientDao;
-import com.tm.auth.po.OAuthClient;
+import com.tm.auth.common.api.OAuthExecption;
+import com.tm.auth.pojo.AuthClientDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.Optional;
 
 /**
  * @author: tangming
@@ -21,9 +16,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class ClientDetailsServiceImpl implements ClientDetailsService {
-
-    @Resource
-    OAuthClientDao oAuthClientDao;
+    @Autowired
+    private AuthClientService clientService;
 
     /**
      * 获取授权id
@@ -35,19 +29,12 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
-            log.info("查找auth对象 ---> clientId={}", clientId);
-            Optional<OAuthClient> oAuthClientOptional = oAuthClientDao.findByClientId(clientId);
-            ClientDetails clientDetails = oAuthClientOptional.get();
-            log.info("查找auth对象 ---> 完成, clientDetails={}", clientDetails);
+            AuthClientDetails clientDetails = clientService.getClientDetails(clientId);
+            if (clientDetails == null)
+                throw new OAuthExecption("No client with requested id: " + clientId);
             return clientDetails;
         } catch (Exception e) {
-            throw new NoSuchClientException("No client with requested id: " + clientId);
+            throw new OAuthExecption("loadClientByClientId error: " + e.getMessage());
         }
-    }
-
-    public void create(OAuthClient client) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
-        oAuthClientDao.save(client);
     }
 }

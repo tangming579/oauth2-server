@@ -1,4 +1,4 @@
-package com.tm.auth.common.gm;
+package com.tm.auth.common.gmJwt;
 
 import com.tm.auth.common.gmUtils.SM2Util;
 import org.bouncycastle.crypto.CryptoException;

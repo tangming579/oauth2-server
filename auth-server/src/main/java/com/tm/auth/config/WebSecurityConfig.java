@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/**",
                         "/v2/api-docs/**",
                         "/doc.html",
+                        "/oauth/**",
                         "/swagger-resources/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }

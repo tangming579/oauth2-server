@@ -1,18 +1,15 @@
 package com.tm.auth.common.converter;
 
-import com.tm.auth.common.gm.SM2Signer;
-import com.tm.auth.common.gm.SM2Verifier;
+import com.tm.auth.common.gmJwt.SM2Signer;
+import com.tm.auth.common.gmJwt.SM2Verifier;
 import com.tm.auth.common.utils.SMJwtHelper;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.jwt.crypto.sign.Signer;
 import org.springframework.security.oauth2.common.*;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.common.util.JsonParser;
 import org.springframework.security.oauth2.common.util.JsonParserFactory;
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
@@ -55,9 +52,8 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(accessToken);
-
         // 将用户信息添加到token额外信息中
-        //result.getAdditionalInformation().put("test", "自定义信息");
+        result.getAdditionalInformation().put("test", "自定义信息");
 
         Map<String, Object> info = new LinkedHashMap(accessToken.getAdditionalInformation());
         String tokenId = result.getValue();
@@ -69,6 +65,12 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         return result;
     }
 
+    /**
+     *
+     * @param oAuth2AccessToken
+     * @param oAuth2Authentication
+     * @return
+     */
     @Override
     public Map<String, ?> convertAccessToken(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
         return this.tokenConverter.convertAccessToken(oAuth2AccessToken, oAuth2Authentication);
@@ -86,6 +88,12 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         return this.tokenConverter.extractAccessToken(value, map);
     }
 
+    /**
+     * 认证信息
+     *
+     * @param map
+     * @return
+     */
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
         return this.tokenConverter.extractAuthentication(map);

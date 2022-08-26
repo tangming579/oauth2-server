@@ -2,7 +2,6 @@ package com.tm.auth.config;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.service.ClientDetailsServiceImpl;
-import com.tm.auth.service.CustomTokenServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -34,11 +33,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Resource
     SM2JwtAccessTokenConverter accessTokenConverter;
-    /**
-     * 密码编码器
-     */
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -98,7 +92,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     AuthorizationServerTokenServices tokenServices() {
-        DefaultTokenServices services = new CustomTokenServices();
+        DefaultTokenServices services = new DefaultTokenServices();
         // 客户端服务
         services.setClientDetailsService(clientService);
         // 存储令牌方式
@@ -108,7 +102,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 令牌有效期
         services.setAccessTokenValiditySeconds(60 * 60 * 2);
         // 支持令牌刷新
-        services.setSupportRefreshToken(true);
+        services.setSupportRefreshToken(false);
         // 刷新令牌有效期
         services.setRefreshTokenValiditySeconds(60 * 60 * 24 * 3);
         return services;

@@ -1,8 +1,6 @@
-package com.tm.auth.po;
+package com.tm.auth.common.gmJwt;
 
-import com.tm.auth.common.utils.SMJwtHelper;
 import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.codec.Codecs;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 

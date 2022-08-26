@@ -1,6 +1,6 @@
 package com.tm.auth.common.utils;
 
-import com.tm.auth.po.SM2JwtImpl;
+import com.tm.auth.common.gmJwt.SM2JwtImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.jwt.*;
 import org.springframework.security.jwt.codec.Codecs;
@@ -8,8 +8,6 @@ import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.jwt.crypto.sign.Signer;
 
 import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
