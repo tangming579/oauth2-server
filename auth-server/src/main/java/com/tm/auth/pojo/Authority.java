@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 public class Authority extends OauthAuthority implements GrantedAuthority {
     @Override
     public String getAuthority() {
-        String jsonStr = JsonUtil.toJsonNode(this).asText();
+        String jsonStr = "path: " + this.getPaths() + ",methods:" + this.getMethods();
         return jsonStr;
     }
 }

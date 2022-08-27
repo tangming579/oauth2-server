@@ -4,9 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.dto.AuthClientRequest;
+import com.tm.auth.mbg.mapper.OauthAuthorityMapper;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
+import com.tm.auth.mbg.model.OauthAuthorityExample;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
+import com.tm.auth.pojo.Authority;
 import com.tm.auth.pojo.OAuthClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,8 @@ public class AuthClientService {
     private Integer access_token_validity_seconds;
     @Autowired
     private OauthClientDetailsMapper oauthClientDetailsMapper;
+    @Autowired
+    private OauthAuthorityMapper oauthAuthorityMapper;
 
     public int createClient(AuthClientRequest authClientRequest) {
         OauthClientDetails oauthClientDetails = new OauthClientDetails();
@@ -65,6 +71,14 @@ public class AuthClientService {
         if (oauthClientDetails == null) return null;
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
+        //oauthAuthorityMapper.selectByExample(new OauthAuthorityExample());
+        List<Authority> authorities=new ArrayList<>();
+        Authority authority = new Authority();
+        authority.setClientId("aaa");
+        authority.setMethods("get");
+        authority.setPaths("/getUser");
+        authorities.add(authority);
+        clientDetails.setAuthorities(authorities);
         return clientDetails;
     }
 

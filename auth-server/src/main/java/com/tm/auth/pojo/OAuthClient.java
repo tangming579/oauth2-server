@@ -55,7 +55,7 @@ public class OAuthClient implements ClientDetails {
     /**
      * 指定客户端所拥有的Spring Security的权限值
      */
-    private List<GrantedAuthority> authorities;
+    private List<Authority> authorities;
 
     private String jwtPrivateKey;
 
@@ -97,6 +97,9 @@ public class OAuthClient implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return Collections.EMPTY_LIST;
+        if (authorities == null) return Collections.EMPTY_LIST;
+        List<GrantedAuthority> authoritiesStr = new ArrayList<>();
+        authoritiesStr.addAll(authorities);
+        return authoritiesStr;
     }
 }
