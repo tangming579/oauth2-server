@@ -1,6 +1,7 @@
 package com.tm.auth.config;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
+import com.tm.auth.common.gmJwt.SM3PasswordEncoder;
 import com.tm.auth.service.ClientDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     SM2JwtAccessTokenConverter accessTokenConverter;
 
     @Resource
+    private PasswordEncoder passwordEncoder;
+    @Resource
     private AuthenticationManager authenticationManager;
 
     @Resource
@@ -60,7 +63,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new SM3PasswordEncoder();
     }
 
     /**
@@ -101,10 +104,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         services.setTokenEnhancer(accessTokenConverter);
         // 令牌有效期
         services.setAccessTokenValiditySeconds(60 * 60 * 2);
-        // 支持令牌刷新
+        // 不支持令牌刷新
         services.setSupportRefreshToken(false);
-        // 刷新令牌有效期
-        services.setRefreshTokenValiditySeconds(60 * 60 * 24 * 3);
         return services;
     }
 }

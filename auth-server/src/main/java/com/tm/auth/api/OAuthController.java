@@ -40,20 +40,20 @@ public class OAuthController {
     @Autowired
     private CheckTokenEndpoint checkTokenEndpoint;
 
-    @ApiOperation("应用获取令牌")
-    @PostMapping(value = "/token")
-    public CommonResult getToken(@Valid @RequestBody AuthTokenRequest request) throws HttpRequestMethodNotSupportedException {
-        Map<String, String> params = new HashMap<>();
-        params.put("grant_type", "client_credentials");
-        params.put("client_id", request.getClientId());
-        params.put("client_secret", request.getClientSecret());
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(request.getClientId(),
-                        request.getClientSecret(), new ArrayList<>());
-        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(authenticationToken, params).getBody();
-        return CommonResult.success(oAuth2AccessToken);
-    }
+//    @ApiOperation("应用获取令牌")
+//    @PostMapping(value = "/token")
+//    public CommonResult getToken(@Valid @RequestBody AuthTokenRequest request) throws HttpRequestMethodNotSupportedException {
+//        Map<String, String> params = new HashMap<>();
+//        params.put("grant_type", "client_credentials");
+//        params.put("client_id", request.getClientId());
+//        params.put("client_secret", request.getClientSecret());
+//
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//                new UsernamePasswordAuthenticationToken(request.getClientId(),
+//                        request.getClientSecret(), new ArrayList<>());
+//        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(authenticationToken, params).getBody();
+//        return CommonResult.success(oAuth2AccessToken);
+//    }
 
     @ApiOperation("校验令牌")
     @PostMapping(value = "/check_token")

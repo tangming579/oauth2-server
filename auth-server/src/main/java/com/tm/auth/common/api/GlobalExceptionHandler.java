@@ -20,13 +20,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = OAuthExecption.class)
     public CommonResult handleBusinessException(OAuthExecption e) {
         log.error("error", e);
-        return CommonResult.failed("error");
+        return CommonResult.failed(e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
     public CommonResult handleException(Exception e) {
         log.error("error", e);
-        return CommonResult.failed("error");
+        return CommonResult.failed(e.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -36,11 +36,12 @@ public class GlobalExceptionHandler {
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             if (fieldError != null) {
-                message = fieldError.getField()+fieldError.getDefaultMessage();
+                message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
         return CommonResult.failed(message);
     }
+
     @ExceptionHandler(value = BindException.class)
     public CommonResult handleValidException(BindException e) {
         log.error("error", e);
@@ -52,6 +53,6 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return CommonResult.failed("error");
+        return CommonResult.failed(message);
     }
 }
