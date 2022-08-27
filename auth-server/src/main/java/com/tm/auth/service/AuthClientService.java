@@ -1,23 +1,20 @@
 package com.tm.auth.service;
 
 import com.github.pagehelper.PageHelper;
-import com.nimbusds.jose.util.ByteUtils;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.dto.AuthClientRequest;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
-import com.tm.auth.pojo.AuthClientDetails;
+import com.tm.auth.pojo.OAuthClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +35,7 @@ public class AuthClientService {
         OauthClientDetails oauthClientDetails = new OauthClientDetails();
         BeanUtils.copyProperties(authClientRequest, oauthClientDetails);
         //为服务生成公私钥
-        Map.Entry<String, String> keyPair = SMUtils.generateSM2KeyPair();
+        Map.Entry<String, String> keyPair = SMUtils.generateSM2Key();
         oauthClientDetails.setJwtPrivateKey(keyPair.getKey());
         oauthClientDetails.setJwtPublicKey(keyPair.getValue());
 
@@ -63,10 +60,10 @@ public class AuthClientService {
         return oauthClientDetailsMapper.selectByPrimaryKey(clientId);
     }
 
-    public AuthClientDetails getClientDetails(String clientId) {
+    public OAuthClient getClientDetails(String clientId) {
         OauthClientDetails oauthClientDetails = getClient(clientId);
         if (oauthClientDetails == null) return null;
-        AuthClientDetails clientDetails = new AuthClientDetails();
+        OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
         return clientDetails;
     }

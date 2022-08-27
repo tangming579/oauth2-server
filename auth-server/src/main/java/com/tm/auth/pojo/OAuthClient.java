@@ -13,7 +13,7 @@ import java.util.*;
  * @date 2022/8/25
  */
 @Data
-public class AuthClientDetails implements ClientDetails {
+public class OAuthClient implements ClientDetails {
     /**
      * 客户端ID
      */

@@ -5,15 +5,12 @@ import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.gmUtils.SM3Util;
 import com.tm.auth.common.gmUtils.SM4Util;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.digests.SM3Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -59,7 +56,7 @@ public class SMUtils {
         }
     }
 
-    public static Map.Entry<String, String> generateSM2KeyPair() {
+    public static Map.Entry<String, String> generateSM2Key() {
         try {
             //生成公私钥
             AsymmetricCipherKeyPair keyPair = SM2Util.generateKeyPairParameter();
