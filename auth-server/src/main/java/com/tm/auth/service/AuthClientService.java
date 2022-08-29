@@ -72,12 +72,15 @@ public class AuthClientService {
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
         //oauthAuthorityMapper.selectByExample(new OauthAuthorityExample());
-        List<Authority> authorities=new ArrayList<>();
-        Authority authority = new Authority();
-        authority.setClientId("aaa");
-        authority.setMethods("get");
-        authority.setPaths("/getUser");
-        authorities.add(authority);
+        List<Authority> authorities = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            Authority authority = new Authority();
+            authority.setTargetId("paas-server-a" + i);
+            authority.setMethods("GET,POST");
+            authority.setPaths("/api/getUser/**,/api/product/**");
+            authorities.add(authority);
+        }
+
         clientDetails.setAuthorities(authorities);
         return clientDetails;
     }

@@ -3,7 +3,7 @@
 <mapper namespace="com.tm.auth.mbg.mapper.OauthAuthorityMapper">
   <resultMap id="BaseResultMap" type="com.tm.auth.mbg.model.OauthAuthority">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="methods" jdbcType="VARCHAR" property="methods" />
     <result column="paths" jdbcType="VARCHAR" property="paths" />
   </resultMap>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, client_id, methods, paths
+    id, target_id, methods, paths
   </sql>
   <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthAuthorityExample" resultMap="BaseResultMap">
     select
@@ -99,9 +99,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    insert into public.oauth_authority (id, client_id, methods, 
+    insert into public.oauth_authority (id, target_id, methods, 
       paths)
-    values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{targetId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR}, 
       #{paths,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthAuthority">
@@ -110,8 +110,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="clientId != null">
-        client_id,
+      <if test="targetId != null">
+        target_id,
       </if>
       <if test="methods != null">
         methods,
@@ -124,8 +124,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="clientId != null">
-        #{clientId,jdbcType=VARCHAR},
+      <if test="targetId != null">
+        #{targetId,jdbcType=VARCHAR},
       </if>
       <if test="methods != null">
         #{methods,jdbcType=VARCHAR},
@@ -147,8 +147,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.clientId != null">
-        client_id = #{record.clientId,jdbcType=VARCHAR},
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
       </if>
       <if test="record.methods != null">
         methods = #{record.methods,jdbcType=VARCHAR},
@@ -164,7 +164,7 @@
   <update id="updateByExample" parameterType="map">
     update public.oauth_authority
     set id = #{record.id,jdbcType=BIGINT},
-      client_id = #{record.clientId,jdbcType=VARCHAR},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
       methods = #{record.methods,jdbcType=VARCHAR},
       paths = #{record.paths,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -174,8 +174,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthAuthority">
     update public.oauth_authority
     <set>
-      <if test="clientId != null">
-        client_id = #{clientId,jdbcType=VARCHAR},
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=VARCHAR},
       </if>
       <if test="methods != null">
         methods = #{methods,jdbcType=VARCHAR},
@@ -188,7 +188,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthAuthority">
     update public.oauth_authority
-    set client_id = #{clientId,jdbcType=VARCHAR},
+    set target_id = #{targetId,jdbcType=VARCHAR},
       methods = #{methods,jdbcType=VARCHAR},
       paths = #{paths,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

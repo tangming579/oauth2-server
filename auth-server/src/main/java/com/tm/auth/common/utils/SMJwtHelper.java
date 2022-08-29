@@ -1,15 +1,18 @@
 package com.tm.auth.common.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.tm.auth.common.gmJwt.SM2JwtImpl;
+import com.tm.auth.mbg.model.OauthAuthority;
+import com.tm.auth.pojo.Authority;
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.security.jwt.*;
 import org.springframework.security.jwt.codec.Codecs;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.jwt.crypto.sign.Signer;
 
 import java.nio.CharBuffer;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author tangming
@@ -58,6 +61,8 @@ public class SMJwtHelper {
         byte[] claims = Codecs.utf8Encode(content);
         byte[] headerBytes = createHeader().getBytes();
 
+        claims = convertAuthToJson(claims);
+
         String headerBase64 = Base64.encodeBase64URLSafeString(headerBytes);
         String payloadBase64 = Base64.encodeBase64URLSafeString(claims);
 
@@ -84,10 +89,24 @@ public class SMJwtHelper {
         return hash;
     }
 
-    static String createHeader() {
+    private static String createHeader() {
         Map<String, String> map = new LinkedHashMap();
         map.put("alg", "SM3withSM2");
         map.put("typ", "JWT_PAAS");
         return JsonUtil.toJsonString(map);
+    }
+
+    private static byte[] convertAuthToJson(byte[] claims) {
+        Map<String, Object> node = JsonUtil.parseMap(new String(claims));
+        List<String> au = (List<String>) node.get("authorities");
+        if (Objects.isNull(au)) return claims;
+        List<OauthAuthority> authorities = new ArrayList<>();
+        for (String auth : au) {
+            OauthAuthority authority = JsonUtil.parseObject(auth, OauthAuthority.class);
+            authorities.add(authority);
+        }
+        node.put("authorities", authorities);
+        claims = JsonUtil.toJsonString(node).getBytes();
+        return claims;
     }
 }

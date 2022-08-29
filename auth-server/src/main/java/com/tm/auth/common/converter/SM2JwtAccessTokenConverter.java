@@ -36,9 +36,8 @@ import java.util.Map;
 public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenConverter {
     public static final String TOKEN_ID = "jti";
     public static final String TOKEN_EXP = "exp";
-    private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+    private AccessTokenConverter tokenConverter = new SM2AccessTokenConverter();
     private JsonParser objectMapper = JsonParserFactory.create();
-    private String verifierKey = (new RandomValueStringGenerator()).generate();
     private Signer signer;
     private SignatureVerifier verifier;
 
@@ -105,7 +104,6 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         this.signer = new SM2Signer((BCECPrivateKey) privateKey);
         PublicKey publicKey = keyPair.getPublic();
         this.verifier = new SM2Verifier((BCECPublicKey) publicKey);
-        this.verifierKey = "-----BEGIN PUBLIC KEY-----\n" + new String(Base64.encode(publicKey.getEncoded())) + "\n-----END PUBLIC KEY-----";
     }
 
     protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {

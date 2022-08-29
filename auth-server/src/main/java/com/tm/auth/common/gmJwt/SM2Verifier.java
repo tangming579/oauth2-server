@@ -39,7 +39,7 @@ public class SM2Verifier implements SignatureVerifier {
                 throw new InvalidSignatureException("SM2 Signature did not match content");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new InvalidSignatureException("SM2 Signature did not match content");
         }
     }
 
