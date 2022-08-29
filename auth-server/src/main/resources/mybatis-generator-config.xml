@@ -42,5 +42,6 @@
         <table schema="public" tableName="oauth_client_details" delimitIdentifiers="false"/>
         <table schema="public" tableName="oauth_authority" delimitIdentifiers="false"/>
         <table schema="public" tableName="oauth_client_authority_rel" delimitIdentifiers="false"/>
+        <table schema="public" tableName="oauth_client_keypair" delimitIdentifiers="false"/>
     </context>
 </generatorConfiguration>

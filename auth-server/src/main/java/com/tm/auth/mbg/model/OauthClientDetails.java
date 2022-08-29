@@ -14,10 +14,6 @@ public class OauthClientDetails implements Serializable {
 
     private String clientDesc;
 
-    private String jwtPublicKey;
-
-    private String jwtPrivateKey;
-
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
@@ -62,22 +58,6 @@ public class OauthClientDetails implements Serializable {
         this.clientDesc = clientDesc;
     }
 
-    public String getJwtPublicKey() {
-        return jwtPublicKey;
-    }
-
-    public void setJwtPublicKey(String jwtPublicKey) {
-        this.jwtPublicKey = jwtPublicKey;
-    }
-
-    public String getJwtPrivateKey() {
-        return jwtPrivateKey;
-    }
-
-    public void setJwtPrivateKey(String jwtPrivateKey) {
-        this.jwtPrivateKey = jwtPrivateKey;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -97,8 +77,6 @@ public class OauthClientDetails implements Serializable {
         sb.append(", clientName=").append(clientName);
         sb.append(", accessTokenValidity=").append(accessTokenValidity);
         sb.append(", clientDesc=").append(clientDesc);
-        sb.append(", jwtPublicKey=").append(jwtPublicKey);
-        sb.append(", jwtPrivateKey=").append(jwtPrivateKey);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

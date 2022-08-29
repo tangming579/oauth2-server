@@ -7,8 +7,6 @@
     <result column="client_name" jdbcType="VARCHAR" property="clientName" />
     <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity" />
     <result column="client_desc" jdbcType="VARCHAR" property="clientDesc" />
-    <result column="jwt_public_key" jdbcType="VARCHAR" property="jwtPublicKey" />
-    <result column="jwt_private_key" jdbcType="VARCHAR" property="jwtPrivateKey" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -70,8 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    client_id, client_secret, client_name, access_token_validity, client_desc, jwt_public_key, 
-    jwt_private_key, create_time
+    client_id, client_secret, client_name, access_token_validity, client_desc, create_time
   </sql>
   <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample" resultMap="BaseResultMap">
     select
@@ -105,11 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
     insert into public.oauth_client_details (client_id, client_secret, client_name, 
-      access_token_validity, client_desc, jwt_public_key, 
-      jwt_private_key, create_time)
+      access_token_validity, client_desc, create_time
+      )
     values (#{clientId,jdbcType=VARCHAR}, #{clientSecret,jdbcType=VARCHAR}, #{clientName,jdbcType=VARCHAR}, 
-      #{accessTokenValidity,jdbcType=INTEGER}, #{clientDesc,jdbcType=VARCHAR}, #{jwtPublicKey,jdbcType=VARCHAR}, 
-      #{jwtPrivateKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{accessTokenValidity,jdbcType=INTEGER}, #{clientDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
     insert into public.oauth_client_details
@@ -128,12 +125,6 @@
       </if>
       <if test="clientDesc != null">
         client_desc,
-      </if>
-      <if test="jwtPublicKey != null">
-        jwt_public_key,
-      </if>
-      <if test="jwtPrivateKey != null">
-        jwt_private_key,
       </if>
       <if test="createTime != null">
         create_time,
@@ -154,12 +145,6 @@
       </if>
       <if test="clientDesc != null">
         #{clientDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="jwtPublicKey != null">
-        #{jwtPublicKey,jdbcType=VARCHAR},
-      </if>
-      <if test="jwtPrivateKey != null">
-        #{jwtPrivateKey,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -190,12 +175,6 @@
       <if test="record.clientDesc != null">
         client_desc = #{record.clientDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.jwtPublicKey != null">
-        jwt_public_key = #{record.jwtPublicKey,jdbcType=VARCHAR},
-      </if>
-      <if test="record.jwtPrivateKey != null">
-        jwt_private_key = #{record.jwtPrivateKey,jdbcType=VARCHAR},
-      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -211,8 +190,6 @@
       client_name = #{record.clientName,jdbcType=VARCHAR},
       access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
       client_desc = #{record.clientDesc,jdbcType=VARCHAR},
-      jwt_public_key = #{record.jwtPublicKey,jdbcType=VARCHAR},
-      jwt_private_key = #{record.jwtPrivateKey,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -233,12 +210,6 @@
       <if test="clientDesc != null">
         client_desc = #{clientDesc,jdbcType=VARCHAR},
       </if>
-      <if test="jwtPublicKey != null">
-        jwt_public_key = #{jwtPublicKey,jdbcType=VARCHAR},
-      </if>
-      <if test="jwtPrivateKey != null">
-        jwt_private_key = #{jwtPrivateKey,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -251,8 +222,6 @@
       client_name = #{clientName,jdbcType=VARCHAR},
       access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
       client_desc = #{clientDesc,jdbcType=VARCHAR},
-      jwt_public_key = #{jwtPublicKey,jdbcType=VARCHAR},
-      jwt_private_key = #{jwtPrivateKey,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where client_id = #{clientId,jdbcType=VARCHAR}
   </update>
