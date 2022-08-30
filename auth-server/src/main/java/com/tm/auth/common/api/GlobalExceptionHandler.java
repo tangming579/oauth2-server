@@ -1,6 +1,7 @@
 package com.tm.auth.common.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,19 +19,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = OAuthExecption.class)
-    public CommonResult handleBusinessException(OAuthExecption e) {
+    public AipResult handleBusinessException(OAuthExecption e) {
         log.error("error", e);
-        return CommonResult.failed(e.getMessage());
+        return AipResult.failed(e.getMessage());
     }
 
     @ExceptionHandler(value = Exception.class)
-    public CommonResult handleException(Exception e) {
+    public AipResult handleException(Exception e) {
         log.error("error", e);
-        return CommonResult.failed(e.getMessage());
+        String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
+        return AipResult.failed(e.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public CommonResult handleValidException(MethodArgumentNotValidException e) {
+    public AipResult handleValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
@@ -39,11 +41,11 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return CommonResult.failed(message);
+        return AipResult.failed(message);
     }
 
     @ExceptionHandler(value = BindException.class)
-    public CommonResult handleValidException(BindException e) {
+    public AipResult handleValidException(BindException e) {
         log.error("error", e);
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
@@ -53,6 +55,6 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return CommonResult.failed(message);
+        return AipResult.failed(message);
     }
 }

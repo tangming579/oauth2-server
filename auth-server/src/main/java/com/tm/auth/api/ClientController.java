@@ -1,7 +1,7 @@
 package com.tm.auth.api;
 
 import com.tm.auth.common.api.CommonPage;
-import com.tm.auth.common.api.CommonResult;
+import com.tm.auth.common.api.AipResult;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.dto.AuthClientRequest;
 import com.tm.auth.service.OAuthClientService;
@@ -28,22 +28,22 @@ public class ClientController {
     @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
-    public CommonResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
-        return CommonResult.success(clientService.createClient(authClientRequest));
+    public AipResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
+        return AipResult.success(clientService.createClient(authClientRequest));
     }
 
     @ApiOperation("删除应用")
     @PostMapping("/delete")
     @ResponseBody
-    public CommonResult delete(String clientId) {
-        return CommonResult.success(clientService.deleteClient(clientId));
+    public AipResult delete(String clientId) {
+        return AipResult.success(clientService.deleteClient(clientId));
     }
 
     @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
-    public CommonResult update(@RequestBody OauthClientDetails authClientRequest) {
-        return CommonResult.success(clientService.updateClient(authClientRequest));
+    public AipResult update(@RequestBody OauthClientDetails authClientRequest) {
+        return AipResult.success(clientService.updateClient(authClientRequest));
     }
 
     @ApiOperation("应用列表")
