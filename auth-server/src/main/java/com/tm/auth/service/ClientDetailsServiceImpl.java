@@ -30,8 +30,6 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
             OAuthClient clientDetails = clientService.getClientDetails(clientId);
-            if (clientDetails == null)
-                throw new OAuthExecption("No client with requested id: " + clientId);
             return clientDetails;
         } catch (Exception e) {
             throw new OAuthExecption("loadClientByClientId error: " + e.getMessage());

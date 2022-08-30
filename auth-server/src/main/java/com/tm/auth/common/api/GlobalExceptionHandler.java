@@ -1,6 +1,8 @@
 package com.tm.auth.common.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private WebResponseExceptionTranslator<OAuth2Exception> providerExceptionHandler = new AuthWebResponseExceptionTranslator();
     @ExceptionHandler(value = OAuthExecption.class)
     public AipResult handleBusinessException(OAuthExecption e) {
         log.error("error", e);
