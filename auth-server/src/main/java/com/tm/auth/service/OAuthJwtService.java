@@ -2,6 +2,7 @@ package com.tm.auth.service;
 
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.utils.SMUtils;
+import com.tm.auth.dto.PublicKeyInfo;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.mapper.OauthClientKeypairMapper;
 import com.tm.auth.mbg.model.OauthClientKeypair;
@@ -14,6 +15,7 @@ import java.security.KeyPair;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author tangming
@@ -51,12 +53,17 @@ public class OAuthJwtService {
         return oauthClientKeypairMapper.selectByPrimaryKey(clientId).getPublicKey();
     }
 
-    public List<OauthClientKeypair> getJwtPublicKey(List<String> clientIds) {
+    public List<PublicKeyInfo> getJwtPublicKey(List<String> clientIds) {
         OauthClientKeypairExample example = new OauthClientKeypairExample();
         if (!CollectionUtils.isEmpty(clientIds)) {
             example.createCriteria().andClientIdIn(clientIds);
         }
         return oauthClientKeypairMapper.selectByExample(example).stream()
-                .map(x->x.);
+                .map(x -> {
+                    PublicKeyInfo info = new PublicKeyInfo();
+                    info.setPublicKey(x.getPublicKey());
+                    info.setClientId(x.getClientId());
+                    return info;
+                }).collect(Collectors.toList());
     }
 }

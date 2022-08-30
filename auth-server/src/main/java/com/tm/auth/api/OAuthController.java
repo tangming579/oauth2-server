@@ -4,6 +4,7 @@ import com.tm.auth.common.api.CommonResult;
 import com.tm.auth.common.gmUtils.BCECUtil;
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.dto.AuthTokenRequest;
+import com.tm.auth.service.OAuthJwtService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author tangming
@@ -49,6 +48,8 @@ public class OAuthController {
     private TokenEndpoint tokenEndpoint;
     @Autowired
     private CheckTokenEndpoint checkTokenEndpoint;
+    @Autowired
+    private OAuthJwtService oAuthJwtService;
 
     /**
      * 自定义获取令牌接口
@@ -93,28 +94,14 @@ public class OAuthController {
 
     @ApiOperation("获取某个资源公钥")
     @GetMapping("/token_key")
-    public CommonResult getKey() throws IOException {
-        //第1部：授权服务-生成公私钥
-        AsymmetricCipherKeyPair keyPair = SM2Util.generateKeyPairParameter();
-        ECPrivateKeyParameters priKey = (ECPrivateKeyParameters) keyPair.getPrivate();
-        ECPublicKeyParameters pubKey = (ECPublicKeyParameters) keyPair.getPublic();
-        //第2部：授权服务-暴露公钥
-        byte[] pubKeyX509Der = BCECUtil.convertECPublicKeyToX509(pubKey);
-        String pubKeyX509Pem = BCECUtil.convertECPublicKeyX509ToPEM(pubKeyX509Der);
-        return CommonResult.success(pubKeyX509Pem);
+    public CommonResult getKey(List<String> clientId) throws IOException {
+        return CommonResult.success(oAuthJwtService.getJwtPublicKey(clientId));
     }
 
     @ApiOperation("获取所有资源公钥")
     @PostMapping("/token_key_all")
     public CommonResult getKeyAll() throws IOException {
-        //第1部：授权服务-生成公私钥
-        AsymmetricCipherKeyPair keyPair = SM2Util.generateKeyPairParameter();
-        ECPrivateKeyParameters priKey = (ECPrivateKeyParameters) keyPair.getPrivate();
-        ECPublicKeyParameters pubKey = (ECPublicKeyParameters) keyPair.getPublic();
-        //第2部：授权服务-暴露公钥
-        byte[] pubKeyX509Der = BCECUtil.convertECPublicKeyToX509(pubKey);
-        String pubKeyX509Pem = BCECUtil.convertECPublicKeyX509ToPEM(pubKeyX509Der);
-        return CommonResult.success(pubKeyX509Pem);
+        return CommonResult.success(oAuthJwtService.getJwtPublicKey(Collections.emptyList()));
     }
 
 //    @GetMapping("/.well-known/jwks.json")

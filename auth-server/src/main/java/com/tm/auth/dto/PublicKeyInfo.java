@@ -8,4 +8,6 @@ import lombok.Data;
  */
 @Data
 public class PublicKeyInfo {
+    private String clientId;
+    private String publicKey;
 }
