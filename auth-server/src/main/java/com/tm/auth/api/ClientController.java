@@ -4,7 +4,7 @@ import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.api.CommonResult;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.dto.AuthClientRequest;
-import com.tm.auth.service.AuthClientService;
+import com.tm.auth.service.OAuthClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author tangming
@@ -24,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class ClientController {
     @Autowired
-    private AuthClientService clientService;
+    private OAuthClientService clientService;
 
     @ApiOperation("创建应用")
     @PostMapping("/create")

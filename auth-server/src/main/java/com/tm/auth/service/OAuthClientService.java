@@ -6,7 +6,6 @@ import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.dto.AuthClientRequest;
 import com.tm.auth.mbg.mapper.OauthAuthorityMapper;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
-import com.tm.auth.mbg.model.OauthAuthorityExample;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
 import com.tm.auth.pojo.Authority;
@@ -16,12 +15,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author tangming
@@ -29,28 +28,29 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class AuthClientService {
+public class OAuthClientService {
     @Value("${paas.auth.access-token-validity-seconds}")
     private Integer access_token_validity_seconds;
     @Autowired
     private OauthClientDetailsMapper oauthClientDetailsMapper;
     @Autowired
     private OauthAuthorityMapper oauthAuthorityMapper;
+    @Autowired
+    private OAuthJwtService oAuthJwtService;
+    @Autowired
+    private OAuthAuthorityService oAuthAuthorityService;
 
+    @Transactional
     public int createClient(AuthClientRequest authClientRequest) {
         OauthClientDetails oauthClientDetails = new OauthClientDetails();
         BeanUtils.copyProperties(authClientRequest, oauthClientDetails);
-        //为服务生成公私钥
-        Map.Entry<String, String> keyPair = SMUtils.generateSM2Key();
-        oauthClientDetails.setJwtPrivateKey(keyPair.getKey());
-        oauthClientDetails.setJwtPublicKey(keyPair.getValue());
-
         if (authClientRequest.getAccessTokenValidity() == null)
             authClientRequest.setAccessTokenValidity(access_token_validity_seconds);
         String secret = authClientRequest.getClientSecret();
         String pw = SMUtils.sm3HashHex(secret.getBytes(StandardCharsets.UTF_8));
         oauthClientDetails.setClientSecret(pw);
         oauthClientDetails.setCreateTime(new Date());
+        oAuthJwtService.generateKeyPair(authClientRequest.getClientId());
         return oauthClientDetailsMapper.insert(oauthClientDetails);
     }
 
@@ -71,16 +71,7 @@ public class AuthClientService {
         if (oauthClientDetails == null) return null;
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
-        //oauthAuthorityMapper.selectByExample(new OauthAuthorityExample());
-        List<Authority> authorities = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            Authority authority = new Authority();
-            authority.setTargetId("paas-server-a" + i);
-            authority.setMethods("GET,POST");
-            authority.setPaths("/api/getUser/**,/api/product/**");
-            authorities.add(authority);
-        }
-
+        List<Authority> authorities = oAuthAuthorityService.getAuthoritiesByClientId(clientId);
         clientDetails.setAuthorities(authorities);
         return clientDetails;
     }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Autowired
-    private AuthClientService clientService;
+    private OAuthClientService clientService;
 
     /**
      * 获取授权id

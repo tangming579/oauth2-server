@@ -1,11 +1,19 @@
 package com.tm.auth.service;
 
 import com.tm.auth.common.gmUtils.SM2Util;
+import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
+import com.tm.auth.mbg.mapper.OauthClientKeypairMapper;
+import com.tm.auth.mbg.model.OauthClientKeypair;
+import com.tm.auth.mbg.model.OauthClientKeypairExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.security.KeyPair;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author tangming
@@ -14,29 +22,41 @@ import java.security.KeyPair;
 @Service
 public class OAuthJwtService {
     @Autowired
-    OauthClientDetailsMapper oauthClientDetailsMapper;
+    OauthClientKeypairMapper oauthClientKeypairMapper;
 
     /**
      * 生成SM2非对称加密秘钥对
      *
      * @return
      */
-    public KeyPair generateKeyPair() {
-        try {
-            KeyPair KeyPair = SM2Util.generateKeyPair();
-            return KeyPair;
-        } catch (Exception e) {
-            return null;
-        }
+    public Integer generateKeyPair(String clientId) {
+        //为服务生成公私钥
+        Map.Entry<String, String> keyPair = SMUtils.generateSM2Key();
+        OauthClientKeypair keypair = new OauthClientKeypair();
+        keypair.setClientId(clientId);
+        keypair.setPrivateKey(keyPair.getKey());
+        keypair.setPublicKey(keyPair.getValue());
+        return oauthClientKeypairMapper.insert(keypair);
+    }
+
+    public OauthClientKeypair getJwtKeypair(String clientId) {
+        return oauthClientKeypairMapper.selectByPrimaryKey(clientId);
     }
 
     public String getJwtPrivateKey(String clientId) {
-        String key = oauthClientDetailsMapper.selectByPrimaryKey(clientId).getJwtPrivateKey();
-        return key;
+        return oauthClientKeypairMapper.selectByPrimaryKey(clientId).getPrivateKey();
     }
 
     public String getJwtPublicKey(String clientId) {
-        String key = oauthClientDetailsMapper.selectByPrimaryKey(clientId).getJwtPublicKey();
-        return key;
+        return oauthClientKeypairMapper.selectByPrimaryKey(clientId).getPublicKey();
+    }
+
+    public List<OauthClientKeypair> getJwtPublicKey(List<String> clientIds) {
+        OauthClientKeypairExample example = new OauthClientKeypairExample();
+        if (!CollectionUtils.isEmpty(clientIds)) {
+            example.createCriteria().andClientIdIn(clientIds);
+        }
+        return oauthClientKeypairMapper.selectByExample(example).stream()
+                .map(x->x.);
     }
 }
