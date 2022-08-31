@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022/8/24
  */
 @Configuration
-@MapperScan({"com.tm.auth.mbg.mapper"})
+@MapperScan({"com.tm.auth.mbg.mapper", "com.tm.auth.dao"})
 public class MyBatisConfig {
 }

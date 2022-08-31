@@ -244,62 +244,52 @@ public class OauthClientAuthorityRelExample {
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdEqualTo(String value) {
+        public Criteria andAuthorityIdEqualTo(Long value) {
             addCriterion("authority_id =", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotEqualTo(String value) {
+        public Criteria andAuthorityIdNotEqualTo(Long value) {
             addCriterion("authority_id <>", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdGreaterThan(String value) {
+        public Criteria andAuthorityIdGreaterThan(Long value) {
             addCriterion("authority_id >", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdGreaterThanOrEqualTo(String value) {
+        public Criteria andAuthorityIdGreaterThanOrEqualTo(Long value) {
             addCriterion("authority_id >=", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdLessThan(String value) {
+        public Criteria andAuthorityIdLessThan(Long value) {
             addCriterion("authority_id <", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdLessThanOrEqualTo(String value) {
+        public Criteria andAuthorityIdLessThanOrEqualTo(Long value) {
             addCriterion("authority_id <=", value, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdLike(String value) {
-            addCriterion("authority_id like", value, "authorityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAuthorityIdNotLike(String value) {
-            addCriterion("authority_id not like", value, "authorityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAuthorityIdIn(List<String> values) {
+        public Criteria andAuthorityIdIn(List<Long> values) {
             addCriterion("authority_id in", values, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotIn(List<String> values) {
+        public Criteria andAuthorityIdNotIn(List<Long> values) {
             addCriterion("authority_id not in", values, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdBetween(String value1, String value2) {
+        public Criteria andAuthorityIdBetween(Long value1, Long value2) {
             addCriterion("authority_id between", value1, value2, "authorityId");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotBetween(String value1, String value2) {
+        public Criteria andAuthorityIdNotBetween(Long value1, Long value2) {
             addCriterion("authority_id not between", value1, value2, "authorityId");
             return (Criteria) this;
         }

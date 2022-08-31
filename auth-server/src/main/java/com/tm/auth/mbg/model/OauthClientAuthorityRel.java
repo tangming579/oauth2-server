@@ -7,7 +7,7 @@ public class OauthClientAuthorityRel implements Serializable {
 
     private String clientId;
 
-    private String authorityId;
+    private Long authorityId;
 
     private static final long serialVersionUID = 1L;
 
@@ -27,11 +27,11 @@ public class OauthClientAuthorityRel implements Serializable {
         this.clientId = clientId;
     }
 
-    public String getAuthorityId() {
+    public Long getAuthorityId() {
         return authorityId;
     }
 
-    public void setAuthorityId(String authorityId) {
+    public void setAuthorityId(Long authorityId) {
         this.authorityId = authorityId;
     }
 

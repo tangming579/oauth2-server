@@ -1,9 +1,11 @@
 package com.tm.auth.service;
 
+import com.tm.auth.dao.OauthClientAuthorityRelDao;
 import com.tm.auth.mbg.mapper.OauthAuthorityMapper;
 import com.tm.auth.mbg.model.OauthAuthority;
 import com.tm.auth.mbg.model.OauthAuthorityExample;
 import com.tm.auth.pojo.Authority;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +21,18 @@ import java.util.stream.Collectors;
 @Service
 public class OAuthAuthorityService {
     @Autowired
-    private OauthAuthorityMapper oauthAuthorityMapper;
+    private OauthClientAuthorityRelDao oauthClientAuthorityRelDao;
 
     public List<OauthAuthority> getOAuthAuthoritiesByClientId(String targetId) {
-        OauthAuthorityExample example = new OauthAuthorityExample();
-        example.createCriteria().andTargetIdEqualTo(targetId);
-        return oauthAuthorityMapper.selectByExample(example);
+        return oauthClientAuthorityRelDao.getPermissionList(targetId);
     }
 
     public List<Authority> getAuthoritiesByClientId(String targetId) {
         Optional<List<OauthAuthority>> authorities = Optional.ofNullable(getOAuthAuthoritiesByClientId(targetId));
-        if (!authorities.isPresent()) return Collections.emptyList();
-        return authorities.get().stream().map(x->(Authority)x).collect(Collectors.toList());
+        return authorities.map(oauthAuthorities -> oauthAuthorities.stream().map(x -> {
+            Authority authority = new Authority();
+            BeanUtils.copyProperties(x, authority);
+            return authority;
+        }).collect(Collectors.toList())).orElse(Collections.emptyList());
     }
 }

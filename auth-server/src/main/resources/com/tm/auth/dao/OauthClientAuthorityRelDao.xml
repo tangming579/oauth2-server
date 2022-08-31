@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tm.auth.dao.OauthClientAuthorityRelDao">
+    <select id="getPermissionList" resultMap="com.tm.auth.mbg.mapper.OauthAuthorityMapper.BaseResultMap">
+        SELECT
+        oa.*
+        FROM
+        oauth_authority oa
+        LEFT JOIN oauth_client_authority_rel ar ON ar.authority_id = oa.id
+        WHERE
+        ar.client_id = #{clientId}
+    </select>
+</mapper>

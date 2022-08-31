@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.tm.auth.mbg.model.OauthClientAuthorityRel">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="client_id" jdbcType="VARCHAR" property="clientId" />
-    <result column="authority_id" jdbcType="VARCHAR" property="authorityId" />
+    <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -100,7 +100,7 @@
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
     insert into public.oauth_client_authority_rel (id, client_id, authority_id
       )
-    values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=BIGINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
@@ -124,7 +124,7 @@
         #{clientId,jdbcType=VARCHAR},
       </if>
       <if test="authorityId != null">
-        #{authorityId,jdbcType=VARCHAR},
+        #{authorityId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -144,7 +144,7 @@
         client_id = #{record.clientId,jdbcType=VARCHAR},
       </if>
       <if test="record.authorityId != null">
-        authority_id = #{record.authorityId,jdbcType=VARCHAR},
+        authority_id = #{record.authorityId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -155,7 +155,7 @@
     update public.oauth_client_authority_rel
     set id = #{record.id,jdbcType=BIGINT},
       client_id = #{record.clientId,jdbcType=VARCHAR},
-      authority_id = #{record.authorityId,jdbcType=VARCHAR}
+      authority_id = #{record.authorityId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -167,7 +167,7 @@
         client_id = #{clientId,jdbcType=VARCHAR},
       </if>
       <if test="authorityId != null">
-        authority_id = #{authorityId,jdbcType=VARCHAR},
+        authority_id = #{authorityId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -175,7 +175,7 @@
   <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
     update public.oauth_client_authority_rel
     set client_id = #{clientId,jdbcType=VARCHAR},
-      authority_id = #{authorityId,jdbcType=VARCHAR}
+      authority_id = #{authorityId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
