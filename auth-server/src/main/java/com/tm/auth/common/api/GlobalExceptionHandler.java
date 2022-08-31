@@ -1,8 +1,11 @@
 package com.tm.auth.common.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.common.exceptions.BadClientCredentialsException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
-import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 
 /**
  * @author tangming
@@ -20,20 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private WebResponseExceptionTranslator<OAuth2Exception> providerExceptionHandler = new AuthWebResponseExceptionTranslator();
-    @ExceptionHandler(value = OAuthExecption.class)
-    public AipResult handleBusinessException(OAuthExecption e) {
-        log.error("error", e);
-        return AipResult.failed(e.getMessage());
-    }
-
-    @ExceptionHandler(value = Exception.class)
-    public AipResult handleException(Exception e) {
-        log.error("error", e);
-        String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
-        return AipResult.failed(e.getMessage());
-    }
-
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public AipResult handleValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
@@ -59,5 +49,18 @@ public class GlobalExceptionHandler {
             }
         }
         return AipResult.failed(message);
+    }
+
+    @ExceptionHandler({Exception.class})
+    public AipResult handleException(Exception e) throws Exception {
+        String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
+        return AipResult.failed(msg);
+    }
+
+    @ExceptionHandler({HttpClientErrorException.class})
+    public AipResult handleClientRegistrationException(HttpClientErrorException e) throws Exception {
+      if(e.getStatusCode()== HttpStatus.UNAUTHORIZED)
+          return AipResult.failed("客户端id或密码错误");
+        return AipResult.failed(e.getMessage());
     }
 }

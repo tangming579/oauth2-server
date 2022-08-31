@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,9 +31,11 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
             OAuthClient clientDetails = clientService.getClientDetails(clientId);
+            if (clientDetails == null)
+                throw new NoSuchClientException("No client with requested id: " + clientId);
             return clientDetails;
         } catch (Exception e) {
-            throw new OAuthExecption("loadClientByClientId error: " + e.getMessage());
+            throw new NoSuchClientException("No client with requested id: " + clientId);
         }
     }
 }

@@ -30,8 +30,8 @@ public class AipResult<T> {
     /**
      * 成功返回结果
      *
-     * @param data 获取的数据
-     * @param  message 提示信息
+     * @param data    获取的数据
+     * @param message 提示信息
      */
     public static <T> AipResult<T> success(T data, String message) {
         return new AipResult<T>(ResultCode.SUCCESS.getCode(), message, data);
@@ -39,6 +39,7 @@ public class AipResult<T> {
 
     /**
      * 失败返回结果
+     *
      * @param message 提示信息
      */
     public static <T> AipResult<T> failed(String message) {
