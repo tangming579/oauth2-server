@@ -8,15 +8,14 @@ public enum ResultCode {
     SUCCESS(0, "成功"),
     FAILED(-1, "失败"),
     VALIDATE_FAILED(100000, "参数检验失败"),
-    UNAUTHORIZED(100001, "http head中缺少Authorization。"),
+    AUTHORIZATION_LOST(100001, "http head中缺少Authorization"),
     TOKEN_LOST(100002, "缺少token"),
-    CLIENT_ID(100003, "client_id不存在"),
-    CLIENT_SECRET(100004, "client_secret 非法"),
-    OFFLINE(100005, "应用不处于上线状态"),
-    TOKEN_ILLEGAL(100006, "token非法"),
-    TOKEN_EXPIRED(100007, "token过期"),
-    PERMISSION_LIST_FAILED(100008, "获取应用具有的权限列表失败"),
-    FORBIDDEN(100009, "权限不足，拒绝访问");
+    UNAUTHORIZED(100003, "未经许可的客户端，请检查id和secret"),
+    OFFLINE(100004, "应用不处于上线状态"),
+    TOKEN_ILLEGAL(100005, "token非法"),
+    TOKEN_EXPIRED(100006, "token过期"),
+    PERMISSION_FAILED(100007, "获取应用具有的权限列表失败"),
+    FORBIDDEN(100008, "权限不足，拒绝访问");
     private long code;
     private String message;
 

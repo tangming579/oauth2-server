@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return AipResult.failed(message);
+        return AipResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
     }
 
     @ExceptionHandler(value = BindException.class)
@@ -48,19 +48,19 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return AipResult.failed(message);
+        return AipResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
     }
 
     @ExceptionHandler({Exception.class})
-    public AipResult handleException(Exception e) throws Exception {
+    public AipResult handleException(Exception e) {
         String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
         return AipResult.failed(msg);
     }
 
     @ExceptionHandler({HttpClientErrorException.class})
-    public AipResult handleClientRegistrationException(HttpClientErrorException e) throws Exception {
-      if(e.getStatusCode()== HttpStatus.UNAUTHORIZED)
-          return AipResult.failed("客户端id或密码错误");
+    public AipResult handleClientRegistrationException(HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatus.UNAUTHORIZED)
+            return AipResult.failed(ResultCode.UNAUTHORIZED);
         return AipResult.failed(e.getMessage());
     }
 }

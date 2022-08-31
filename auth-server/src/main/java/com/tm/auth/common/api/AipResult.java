@@ -46,6 +46,14 @@ public class AipResult<T> {
         return new AipResult<T>(ResultCode.FAILED.getCode(), message, null);
     }
 
+    public static <T> AipResult<T> failed(long status, String message) {
+        return new AipResult<T>(status, message, null);
+    }
+
+    public static <T> AipResult<T> failed(ResultCode resultCode) {
+        return new AipResult<T>(resultCode.getCode(), resultCode.getMessage(), null);
+    }
+
     public long getStatus() {
         return status;
     }
