@@ -9,5 +9,7 @@
         LEFT JOIN oauth_client_authority_rel ar ON ar.authority_id = oa.id
         WHERE
         ar.client_id = #{clientId}
+        AND
+        oa.target_id = #{targetId}
     </select>
 </mapper>

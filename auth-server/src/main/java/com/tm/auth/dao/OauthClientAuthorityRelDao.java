@@ -13,5 +13,5 @@ public interface OauthClientAuthorityRelDao {
     /**
      * 获取应用所有权限
      */
-    List<OauthAuthority> getPermissionList(@Param("clientId") String clientId);
+    List<OauthAuthority> getPermissionList(@Param("clientId") String clientId, @Param("targetId") String targetId);
 }

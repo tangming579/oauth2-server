@@ -51,9 +51,6 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         DefaultOAuth2AccessToken result = new DefaultOAuth2AccessToken(accessToken);
-        // 将用户信息添加到token额外信息中
-        result.getAdditionalInformation().put("test", "自定义信息");
-
         Map<String, Object> info = new LinkedHashMap(accessToken.getAdditionalInformation());
         String tokenId = result.getValue();
         if (!info.containsKey(TOKEN_ID)) {

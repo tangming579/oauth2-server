@@ -61,6 +61,7 @@ public class OAuthController {
         paramsMap.set("grant_type", "client_credentials");
         paramsMap.set("client_id", request.getClientId());
         paramsMap.set("client_secret", request.getClientSecret());
+        paramsMap.set("target_id", request.getTargetId());
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setOutputStreaming(false); // 解决401报错时，报java.net.HttpRetryException: cannot retry due to server authentication, in streaming mode

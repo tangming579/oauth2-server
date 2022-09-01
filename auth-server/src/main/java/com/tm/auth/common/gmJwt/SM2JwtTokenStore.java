@@ -55,31 +55,7 @@ public class SM2JwtTokenStore implements TokenStore {
     }
 
     public OAuth2RefreshToken readRefreshToken(String tokenValue) {
-        OAuth2AccessToken encodedRefreshToken = this.convertAccessToken(tokenValue);
-        OAuth2RefreshToken refreshToken = this.createRefreshToken(encodedRefreshToken);
-        if (this.approvalStore != null) {
-            OAuth2Authentication authentication = this.readAuthentication(tokenValue);
-            if (authentication.getUserAuthentication() != null) {
-                String userId = authentication.getUserAuthentication().getName();
-                String clientId = authentication.getOAuth2Request().getClientId();
-                Collection<Approval> approvals = this.approvalStore.getApprovals(userId, clientId);
-                Collection<String> approvedScopes = new HashSet();
-                Iterator var9 = approvals.iterator();
-
-                while(var9.hasNext()) {
-                    Approval approval = (Approval)var9.next();
-                    if (approval.isApproved()) {
-                        approvedScopes.add(approval.getScope());
-                    }
-                }
-
-                if (!approvedScopes.containsAll(authentication.getOAuth2Request().getScope())) {
-                    return null;
-                }
-            }
-        }
-
-        return refreshToken;
+        throw new RuntimeException("readRefreshToken not implement");
     }
 
     private OAuth2RefreshToken createRefreshToken(OAuth2AccessToken encodedRefreshToken) {
@@ -122,8 +98,8 @@ public class SM2JwtTokenStore implements TokenStore {
                 Collection<Approval> approvals = new ArrayList();
                 Iterator var6 = auth.getOAuth2Request().getScope().iterator();
 
-                while(var6.hasNext()) {
-                    String scope = (String)var6.next();
+                while (var6.hasNext()) {
+                    String scope = (String) var6.next();
                     approvals.add(new Approval(user.getName(), clientId, scope, new Date(), Approval.ApprovalStatus.APPROVED));
                 }
 

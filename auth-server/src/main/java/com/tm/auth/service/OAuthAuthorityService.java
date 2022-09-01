@@ -23,16 +23,22 @@ public class OAuthAuthorityService {
     @Autowired
     private OauthClientAuthorityRelDao oauthClientAuthorityRelDao;
 
-    public List<OauthAuthority> getOAuthAuthoritiesByClientId(String targetId) {
-        return oauthClientAuthorityRelDao.getPermissionList(targetId);
+    public List<OauthAuthority> getOAuthAuthoritiesByClientId(String clientId, String targetId) {
+        return oauthClientAuthorityRelDao.getPermissionList(clientId, targetId);
     }
 
-    public List<Authority> getAuthoritiesByClientId(String targetId) {
-        Optional<List<OauthAuthority>> authorities = Optional.ofNullable(getOAuthAuthoritiesByClientId(targetId));
-        return authorities.map(oauthAuthorities -> oauthAuthorities.stream().map(x -> {
-            Authority authority = new Authority();
-            BeanUtils.copyProperties(x, authority);
-            return authority;
-        }).collect(Collectors.toList())).orElse(Collections.emptyList());
+    /**
+     * 获取权限信息
+     *
+     * @param clientId 权限所属应用id
+     * @param targetId 权限目标应用id
+     * @return
+     */
+    public Authority getAuthoritiesByClientId(String clientId, String targetId) {
+        Optional<List<OauthAuthority>> authorities = Optional.ofNullable(getOAuthAuthoritiesByClientId(clientId, targetId));
+        Authority authority = new Authority();
+        authority.setTargetId(targetId);
+        authority.setTargetRules(authorities.get());
+        return authority;
     }
 }

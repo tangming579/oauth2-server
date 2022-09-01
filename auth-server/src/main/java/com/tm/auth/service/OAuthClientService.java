@@ -14,11 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +33,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class OAuthClientService {
+public class OAuthClientService implements ClientDetailsService {
     @Value("${paas.auth.access-token-validity-seconds}")
     private Integer access_token_validity_seconds;
     @Autowired
@@ -39,6 +44,16 @@ public class OAuthClientService {
     private OAuthJwtService oAuthJwtService;
     @Autowired
     private OAuthAuthorityService oAuthAuthorityService;
+
+    @Override
+    public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+        try {
+            return getClientDetailsWithAuthorities(clientId, "paas-server-b");
+        } catch (Exception e) {
+            log.error("loadClientByClientId error " + e.getMessage(), e);
+            throw new NoSuchClientException("No client with requested id: " + clientId);
+        }
+    }
 
     @Transactional
     public int createClient(AuthClientRequest authClientRequest) {
@@ -66,12 +81,13 @@ public class OAuthClientService {
         return oauthClientDetailsMapper.selectByPrimaryKey(clientId);
     }
 
-    public OAuthClient getClientDetails(String clientId) {
+    public OAuthClient getClientDetailsWithAuthorities(String clientId, String targetId) {
         OauthClientDetails oauthClientDetails = getClient(clientId);
-        if (oauthClientDetails == null) return null;
+        if (oauthClientDetails == null)
+            throw new NoSuchClientException("No client with requested id: " + clientId);
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
-        List<Authority> authorities = oAuthAuthorityService.getAuthoritiesByClientId(clientId);
+        List<Authority> authorities = Collections.singletonList(oAuthAuthorityService.getAuthoritiesByClientId(clientId, targetId));
         clientDetails.setAuthorities(authorities);
         return clientDetails;
     }

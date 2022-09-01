@@ -1,11 +1,9 @@
 package com.tm.auth.common.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.tm.auth.common.gmJwt.SM2JwtImpl;
 import com.tm.auth.mbg.model.OauthAuthority;
 import com.tm.auth.pojo.Authority;
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.security.jwt.*;
 import org.springframework.security.jwt.codec.Codecs;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
@@ -61,7 +59,7 @@ public class SMJwtHelper {
         byte[] claims = Codecs.utf8Encode(content);
         byte[] headerBytes = createHeader().getBytes();
 
-        claims = convertAuthToJson(claims);
+        claims = convertAuthStrToJson(claims);
 
         String headerBase64 = Base64.encodeBase64URLSafeString(headerBytes);
         String payloadBase64 = Base64.encodeBase64URLSafeString(claims);
@@ -96,13 +94,13 @@ public class SMJwtHelper {
         return JsonUtil.toJsonString(map);
     }
 
-    private static byte[] convertAuthToJson(byte[] claims) {
+    private static byte[] convertAuthStrToJson(byte[] claims) {
         Map<String, Object> node = JsonUtil.parseMap(new String(claims));
         List<String> au = (List<String>) node.get("authorities");
         if (Objects.isNull(au)) return claims;
-        List<OauthAuthority> authorities = new ArrayList<>();
+        List<Authority> authorities = new ArrayList<>();
         for (String auth : au) {
-            OauthAuthority authority = JsonUtil.parseObject(auth, OauthAuthority.class);
+            Authority authority = JsonUtil.parseObject(auth, Authority.class);
             authorities.add(authority);
         }
         node.put("authorities", authorities);
