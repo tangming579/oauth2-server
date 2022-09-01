@@ -1,6 +1,8 @@
 package com.tm.auth.common.gmJwt;
 
 import com.tm.auth.common.gmUtils.SM2Util;
+import com.tm.auth.common.utils.SMUtils;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.springframework.security.jwt.crypto.sign.InvalidSignatureException;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
@@ -12,15 +14,20 @@ import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
  * @date 2022/8/22
  */
 public class SM2Verifier implements SignatureVerifier {
-    private final BCECPublicKey key;
+    private final ECPublicKeyParameters key;
     private final String algorithm;
 
-    public SM2Verifier(BCECPublicKey key) {
+    public SM2Verifier(String publicKeyPem) {
+        this.key = SMUtils.convertToBCECPublicKey(publicKeyPem);
+        this.algorithm = "SM3withSM2";
+    }
+
+    public SM2Verifier(ECPublicKeyParameters key) {
         this.key = key;
         this.algorithm = "SM3withSM2";
     }
 
-    public SM2Verifier(BCECPublicKey key, String algorithm) {
+    public SM2Verifier(ECPublicKeyParameters key, String algorithm) {
         this.key = key;
         this.algorithm = algorithm;
     }
