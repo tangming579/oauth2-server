@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.dto.AuthClientRequest;
-import com.tm.auth.mbg.mapper.OauthAuthorityMapper;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
@@ -20,9 +19,11 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,8 +40,6 @@ public class OAuthClientService implements ClientDetailsService {
     @Autowired
     private OauthClientDetailsMapper oauthClientDetailsMapper;
     @Autowired
-    private OauthAuthorityMapper oauthAuthorityMapper;
-    @Autowired
     private OAuthJwtService oAuthJwtService;
     @Autowired
     private OAuthAuthorityService oAuthAuthorityService;
@@ -48,7 +47,10 @@ public class OAuthClientService implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
-            return getClientDetailsWithAuthorities(clientId, "paas-server-b");
+            //获取请求中的targetId，用于获取目标权限
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String targetId = request.getParameter("target_id");
+            return getClientDetailsWithAuthorities(clientId, targetId);
         } catch (Exception e) {
             log.error("loadClientByClientId error " + e.getMessage(), e);
             throw new NoSuchClientException("No client with requested id: " + clientId);
