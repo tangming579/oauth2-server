@@ -1,31 +1,14 @@
 package com.tm.auth.common.converter;
 
-import com.tm.auth.common.gmJwt.SM2Signer;
-import com.tm.auth.common.gmJwt.SM2Verifier;
-import com.tm.auth.common.utils.JsonUtil;
-import com.tm.auth.common.utils.SMJwtHelper;
+import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.service.OAuthJwtService;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.springframework.security.crypto.codec.Base64;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
-import org.springframework.security.jwt.crypto.sign.Signer;
 import org.springframework.security.oauth2.common.*;
 import org.springframework.security.oauth2.common.util.JsonParser;
 import org.springframework.security.oauth2.common.util.JsonParserFactory;
-import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -57,9 +40,8 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         if (!info.containsKey(TOKEN_ID)) {
             info.put(TOKEN_ID, tokenId);
         }
-        String clientId = "paas-server-test";
         result.setAdditionalInformation(info);
-        result.setValue(this.encode(result, authentication, clientId));
+        result.setValue(this.encode(result, authentication));
         return result;
     }
 
@@ -96,50 +78,20 @@ public class SM2JwtAccessTokenConverter implements TokenEnhancer, AccessTokenCon
         return this.tokenConverter.extractAuthentication(map);
     }
 
-//    public void setKeyPair(KeyPair keyPair) {
-//        PrivateKey privateKey = keyPair.getPrivate();
-//        Assert.state(privateKey instanceof BCECPrivateKey, "KeyPair must be an SM2");
-//        this.signer = new SM2Signer((BCECPrivateKey) privateKey);
-//        PublicKey publicKey = keyPair.getPublic();
-//        this.verifier = new SM2Verifier((BCECPublicKey) publicKey);
-//    }
+    public void setOAuthJwtService(OAuthJwtService oAuthJwtService) {
+        this.oAuthJwtService = oAuthJwtService;
+    }
 
-    protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication, String clientId) {
+    protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         try {
-            SM2Signer signer = getSigner(clientId);
             String content = this.objectMapper.formatMap(this.tokenConverter.convertAccessToken(accessToken, authentication));
-            return SMJwtHelper.encode(content, signer);
+            return oAuthJwtService.encodePayloadToJwtStr(content);
         } catch (Exception e) {
-            throw new IllegalStateException("Cannot convert access token to JSON", e);
+            throw new OAuthExecption("encode access token error" + e.getMessage());
         }
     }
 
-    public Map<String, Object> decode(String token) {
-        try {
-            String clientId = JsonUtil.toJsonNode(token).get("clientId").asText();
-            SM2Verifier verifier = new SM2Verifier(clientId);
-            Jwt jwt = SMJwtHelper.decodeAndVerify(token, verifier);
-            String claimsStr = jwt.getClaims();
-            Map<String, Object> claims = this.objectMapper.parseMap(claimsStr);
-            if (claims.containsKey(TOKEN_EXP) && claims.get(TOKEN_EXP) instanceof Integer) {
-                Integer intValue = (Integer) claims.get(TOKEN_EXP);
-                claims.put(TOKEN_EXP, new Long((long) intValue));
-            }
-            return claims;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot convert access token to JSON", e);
-        }
-    }
-
-    private SM2Signer getSigner(String clientId) {
-        String privateKey = oAuthJwtService.getJwtPrivateKey(clientId);
-        SM2Signer signer = new SM2Signer(privateKey);
-        return signer;
-    }
-
-    private SM2Verifier getVerifier(String clientId) {
-        String publicKey = oAuthJwtService.getJwtPublicKey(clientId);
-        SM2Verifier verifier = new SM2Verifier(publicKey);
-        return verifier;
+    public Map<String, Object> decodeTokenToMap(String token) {
+        return oAuthJwtService.decodeJwtStrAndVerify(token);
     }
 }

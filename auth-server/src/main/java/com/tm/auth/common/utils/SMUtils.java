@@ -5,10 +5,12 @@ import com.tm.auth.common.gmUtils.BCECUtil;
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.gmUtils.SM3Util;
 import com.tm.auth.common.gmUtils.SM4Util;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +22,7 @@ import java.util.Map;
  * @author tangming
  * @date 2022/8/26
  */
+@Slf4j
 public class SMUtils {
     private static final String EPIDEMIC_KEY = "8641F1CF0F312C7DE0BA269C1C47394C";
     private static final byte[] KEY;
@@ -95,11 +98,12 @@ public class SMUtils {
     public static ECPublicKeyParameters convertToBCECPublicKey(String pubKeyX509Pem) {
         try {
             byte[] rs_pubKeyX509Der = BCECUtil.convertECPublicKeyPEMToX509(pubKeyX509Pem);
-            ECPublicKeyParameters publicKey = BCECUtil.convertPublicKeyToParameters(
-                    BCECUtil.convertX509ToECPublicKey(rs_pubKeyX509Der));
+            BCECPublicKey bcecPublicKey = BCECUtil.convertX509ToECPublicKey(rs_pubKeyX509Der);
+            ECPublicKeyParameters publicKey = BCECUtil.convertPublicKeyToParameters(bcecPublicKey);
             return publicKey;
         } catch (Exception e) {
-            throw new OAuthExecption("convertToBCECPublicKey error " + pubKeyX509Pem);
+            log.error("convertToBCECPublicKey error", e);
+            throw new OAuthExecption("convertToBCECPublicKey error " + e.getMessage());
         }
     }
 

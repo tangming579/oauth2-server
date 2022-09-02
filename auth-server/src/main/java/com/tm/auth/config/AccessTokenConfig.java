@@ -2,6 +2,8 @@ package com.tm.auth.config;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.common.gmJwt.SM2JwtTokenStore;
+import com.tm.auth.service.OAuthJwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -12,6 +14,9 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  */
 @Configuration
 public class AccessTokenConfig {
+    @Autowired
+    private OAuthJwtService oAuthJwtService;
+
     /**
      * 基于国密SM2的token存储bean
      *
@@ -29,6 +34,8 @@ public class AccessTokenConfig {
      */
     @Bean
     public SM2JwtAccessTokenConverter jwtAccessTokenConverter() {
-        return new SM2JwtAccessTokenConverter();
+        SM2JwtAccessTokenConverter converter = new SM2JwtAccessTokenConverter();
+        converter.setOAuthJwtService(oAuthJwtService);
+        return converter;
     }
 }

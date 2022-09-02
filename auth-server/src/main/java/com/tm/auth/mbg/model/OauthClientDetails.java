@@ -10,7 +10,7 @@ public class OauthClientDetails implements Serializable {
 
     private String clientName;
 
-    private Integer accessTokenValidity;
+    private Integer accessTokenValiditySeconds;
 
     private String clientDesc;
 
@@ -42,12 +42,12 @@ public class OauthClientDetails implements Serializable {
         this.clientName = clientName;
     }
 
-    public Integer getAccessTokenValidity() {
-        return accessTokenValidity;
+    public Integer getAccessTokenValiditySeconds() {
+        return accessTokenValiditySeconds;
     }
 
-    public void setAccessTokenValidity(Integer accessTokenValidity) {
-        this.accessTokenValidity = accessTokenValidity;
+    public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
+        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
     }
 
     public String getClientDesc() {
@@ -75,7 +75,7 @@ public class OauthClientDetails implements Serializable {
         sb.append(", clientId=").append(clientId);
         sb.append(", clientSecret=").append(clientSecret);
         sb.append(", clientName=").append(clientName);
-        sb.append(", accessTokenValidity=").append(accessTokenValidity);
+        sb.append(", accessTokenValiditySeconds=").append(accessTokenValiditySeconds);
         sb.append(", clientDesc=").append(clientDesc);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

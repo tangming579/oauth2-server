@@ -315,63 +315,63 @@ public class OauthClientDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIsNull() {
-            addCriterion("access_token_validity is null");
+        public Criteria andAccessTokenValiditySecondsIsNull() {
+            addCriterion("access_token_validity_seconds is null");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIsNotNull() {
-            addCriterion("access_token_validity is not null");
+        public Criteria andAccessTokenValiditySecondsIsNotNull() {
+            addCriterion("access_token_validity_seconds is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityEqualTo(Integer value) {
-            addCriterion("access_token_validity =", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds =", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotEqualTo(Integer value) {
-            addCriterion("access_token_validity <>", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds <>", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityGreaterThan(Integer value) {
-            addCriterion("access_token_validity >", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsGreaterThan(Integer value) {
+            addCriterion("access_token_validity_seconds >", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("access_token_validity >=", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds >=", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityLessThan(Integer value) {
-            addCriterion("access_token_validity <", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsLessThan(Integer value) {
+            addCriterion("access_token_validity_seconds <", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityLessThanOrEqualTo(Integer value) {
-            addCriterion("access_token_validity <=", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsLessThanOrEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds <=", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIn(List<Integer> values) {
-            addCriterion("access_token_validity in", values, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsIn(List<Integer> values) {
+            addCriterion("access_token_validity_seconds in", values, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotIn(List<Integer> values) {
-            addCriterion("access_token_validity not in", values, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotIn(List<Integer> values) {
+            addCriterion("access_token_validity_seconds not in", values, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityBetween(Integer value1, Integer value2) {
-            addCriterion("access_token_validity between", value1, value2, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsBetween(Integer value1, Integer value2) {
+            addCriterion("access_token_validity_seconds between", value1, value2, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotBetween(Integer value1, Integer value2) {
-            addCriterion("access_token_validity not between", value1, value2, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotBetween(Integer value1, Integer value2) {
+            addCriterion("access_token_validity_seconds not between", value1, value2, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 

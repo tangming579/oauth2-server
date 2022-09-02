@@ -5,7 +5,7 @@
     <id column="client_id" jdbcType="VARCHAR" property="clientId" />
     <result column="client_secret" jdbcType="VARCHAR" property="clientSecret" />
     <result column="client_name" jdbcType="VARCHAR" property="clientName" />
-    <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity" />
+    <result column="access_token_validity_seconds" jdbcType="INTEGER" property="accessTokenValiditySeconds" />
     <result column="client_desc" jdbcType="VARCHAR" property="clientDesc" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -68,7 +68,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    client_id, client_secret, client_name, access_token_validity, client_desc, create_time
+    client_id, client_secret, client_name, access_token_validity_seconds, client_desc, 
+    create_time
   </sql>
   <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthClientDetailsExample" resultMap="BaseResultMap">
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
     insert into public.oauth_client_details (client_id, client_secret, client_name, 
-      access_token_validity, client_desc, create_time
-      )
+      access_token_validity_seconds, client_desc, 
+      create_time)
     values (#{clientId,jdbcType=VARCHAR}, #{clientSecret,jdbcType=VARCHAR}, #{clientName,jdbcType=VARCHAR}, 
-      #{accessTokenValidity,jdbcType=INTEGER}, #{clientDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      #{accessTokenValiditySeconds,jdbcType=INTEGER}, #{clientDesc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientDetails">
     insert into public.oauth_client_details
@@ -120,8 +121,8 @@
       <if test="clientName != null">
         client_name,
       </if>
-      <if test="accessTokenValidity != null">
-        access_token_validity,
+      <if test="accessTokenValiditySeconds != null">
+        access_token_validity_seconds,
       </if>
       <if test="clientDesc != null">
         client_desc,
@@ -140,8 +141,8 @@
       <if test="clientName != null">
         #{clientName,jdbcType=VARCHAR},
       </if>
-      <if test="accessTokenValidity != null">
-        #{accessTokenValidity,jdbcType=INTEGER},
+      <if test="accessTokenValiditySeconds != null">
+        #{accessTokenValiditySeconds,jdbcType=INTEGER},
       </if>
       <if test="clientDesc != null">
         #{clientDesc,jdbcType=VARCHAR},
@@ -169,8 +170,8 @@
       <if test="record.clientName != null">
         client_name = #{record.clientName,jdbcType=VARCHAR},
       </if>
-      <if test="record.accessTokenValidity != null">
-        access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      <if test="record.accessTokenValiditySeconds != null">
+        access_token_validity_seconds = #{record.accessTokenValiditySeconds,jdbcType=INTEGER},
       </if>
       <if test="record.clientDesc != null">
         client_desc = #{record.clientDesc,jdbcType=VARCHAR},
@@ -188,7 +189,7 @@
     set client_id = #{record.clientId,jdbcType=VARCHAR},
       client_secret = #{record.clientSecret,jdbcType=VARCHAR},
       client_name = #{record.clientName,jdbcType=VARCHAR},
-      access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      access_token_validity_seconds = #{record.accessTokenValiditySeconds,jdbcType=INTEGER},
       client_desc = #{record.clientDesc,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -204,8 +205,8 @@
       <if test="clientName != null">
         client_name = #{clientName,jdbcType=VARCHAR},
       </if>
-      <if test="accessTokenValidity != null">
-        access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      <if test="accessTokenValiditySeconds != null">
+        access_token_validity_seconds = #{accessTokenValiditySeconds,jdbcType=INTEGER},
       </if>
       <if test="clientDesc != null">
         client_desc = #{clientDesc,jdbcType=VARCHAR},
@@ -220,7 +221,7 @@
     update public.oauth_client_details
     set client_secret = #{clientSecret,jdbcType=VARCHAR},
       client_name = #{clientName,jdbcType=VARCHAR},
-      access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      access_token_validity_seconds = #{accessTokenValiditySeconds,jdbcType=INTEGER},
       client_desc = #{clientDesc,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where client_id = #{clientId,jdbcType=VARCHAR}

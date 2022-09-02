@@ -33,7 +33,7 @@ public class SM2JwtTokenStore implements TokenStore {
     }
 
     public OAuth2Authentication readAuthentication(String token) {
-        return this.jwtTokenEnhancer.extractAuthentication(this.jwtTokenEnhancer.decode(token));
+        return this.jwtTokenEnhancer.extractAuthentication(this.jwtTokenEnhancer.decodeTokenToMap(token));
     }
 
     public void storeAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
@@ -45,7 +45,7 @@ public class SM2JwtTokenStore implements TokenStore {
     }
 
     private OAuth2AccessToken convertAccessToken(String tokenValue) {
-        return this.jwtTokenEnhancer.extractAccessToken(tokenValue, this.jwtTokenEnhancer.decode(tokenValue));
+        return this.jwtTokenEnhancer.extractAccessToken(tokenValue, this.jwtTokenEnhancer.decodeTokenToMap(tokenValue));
     }
 
     public void removeAccessToken(OAuth2AccessToken token) {

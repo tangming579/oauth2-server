@@ -1,11 +1,16 @@
 package com.tm.auth.common.gmJwt;
 
+import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.tm.auth.common.gmUtils.SM2Util;
+import com.tm.auth.common.utils.JsonUtil;
 import com.tm.auth.common.utils.SMUtils;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.springframework.security.jwt.crypto.sign.InvalidSignatureException;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import java.util.Map;
 
 /**
  * SM2算法的JWT验签逻辑
@@ -16,6 +21,7 @@ import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 public class SM2Verifier implements SignatureVerifier {
     private final ECPublicKeyParameters key;
     private final String algorithm;
+    public static final String TOKEN_EXP = "exp";
 
     public SM2Verifier(String publicKeyPem) {
         this.key = SMUtils.convertToBCECPublicKey(publicKeyPem);
