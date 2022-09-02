@@ -2,8 +2,10 @@ package com.tm.auth.api;
 
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.api.AipResult;
+import com.tm.auth.dto.AuthoritiesRequest;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.dto.AuthClientRequest;
+import com.tm.auth.service.OAuthAuthorityService;
 import com.tm.auth.service.OAuthClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,8 @@ import javax.validation.Valid;
 public class ClientController {
     @Autowired
     private OAuthClientService clientService;
+    @Autowired
+    private OAuthAuthorityService authorityService;
 
     @ApiOperation("创建应用")
     @PostMapping("/create")
@@ -42,7 +46,7 @@ public class ClientController {
     @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
-    public AipResult update(@RequestBody OauthClientDetails authClientRequest) {
+    public AipResult update(@Valid @RequestBody OauthClientDetails authClientRequest) {
         return AipResult.success(clientService.updateClient(authClientRequest));
     }
 
@@ -56,7 +60,7 @@ public class ClientController {
     @ApiOperation("修改应用权限")
     @PostMapping("/authorities")
     @ResponseBody
-    public void authorities() {
-
+    public AipResult authorities(@Valid @RequestBody AuthoritiesRequest authoritiesRequest) {
+        return AipResult.success(authorityService.authorities(authoritiesRequest));
     }
 }
