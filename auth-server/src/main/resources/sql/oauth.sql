@@ -12,7 +12,7 @@
  Target Server Version : 130007
  File Encoding         : 65001
 
- Date: 29/08/2022 18:23:12
+ Date: 05/09/2022 18:24:57
 */
 
 
@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS "public"."oauth_client_authority_rel";
 CREATE TABLE "public"."oauth_client_authority_rel" (
   "id" int8 NOT NULL DEFAULT nextval('oauth_client_authority_rel_id_seq'::regclass),
   "client_id" varchar(60) COLLATE "pg_catalog"."default",
-  "authority_id" varchar(60) COLLATE "pg_catalog"."default"
+  "authority_id" int8
 )
 ;
 COMMENT ON COLUMN "public"."oauth_client_authority_rel"."client_id" IS '应用id';
@@ -52,7 +52,7 @@ CREATE TABLE "public"."oauth_client_details" (
   "client_id" varchar(60) COLLATE "pg_catalog"."default" NOT NULL DEFAULT NULL::character varying,
   "client_secret" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
   "client_name" varchar(256) COLLATE "pg_catalog"."default" DEFAULT NULL::character varying,
-  "access_token_validity" int4,
+  "access_token_validity_seconds" int4,
   "client_desc" varchar(255) COLLATE "pg_catalog"."default",
   "create_time" timestamp(6)
 )
@@ -60,7 +60,7 @@ CREATE TABLE "public"."oauth_client_details" (
 COMMENT ON COLUMN "public"."oauth_client_details"."client_id" IS 'Oauth2 client_id';
 COMMENT ON COLUMN "public"."oauth_client_details"."client_secret" IS 'Oauth2 client_secret';
 COMMENT ON COLUMN "public"."oauth_client_details"."client_name" IS '应用名称';
-COMMENT ON COLUMN "public"."oauth_client_details"."access_token_validity" IS '可选，access_token的有效时间值(单位:秒)，不填写框架(类refreshTokenValiditySeconds)默认12小时';
+COMMENT ON COLUMN "public"."oauth_client_details"."access_token_validity_seconds" IS '可选，access_token的有效时间值(单位:秒)，不填写框架(类refreshTokenValiditySeconds)默认12小时';
 COMMENT ON COLUMN "public"."oauth_client_details"."client_desc" IS '应用描述信息';
 COMMENT ON COLUMN "public"."oauth_client_details"."create_time" IS '创建时间';
 
