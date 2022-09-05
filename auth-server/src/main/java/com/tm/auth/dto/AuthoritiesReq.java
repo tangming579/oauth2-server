@@ -11,7 +11,7 @@ import java.util.List;
  * @date 2022/9/2
  */
 @Data
-public class AuthoritiesRequest {
+public class AuthoritiesReq {
     @NotBlank(message = "不能为空")
     private String clientId;
 

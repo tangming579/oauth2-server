@@ -1,7 +1,7 @@
 package com.tm.auth.api;
 
 import com.tm.auth.common.api.ApiResult;
-import com.tm.auth.dto.AuthTokenRequest;
+import com.tm.auth.dto.AuthTokenReq;
 import com.tm.auth.service.OAuthJwtService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,7 +53,7 @@ public class OAuthController {
      */
     @ApiOperation("应用获取令牌")
     @PostMapping(value = "/token")
-    public ApiResult getToken(@Valid @RequestBody AuthTokenRequest request) throws HttpRequestMethodNotSupportedException, IOException {
+    public ApiResult getToken(@Valid @RequestBody AuthTokenReq request) throws HttpRequestMethodNotSupportedException, IOException {
         MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
         paramsMap.set("grant_type", "client_credentials");
         paramsMap.set("client_id", request.getClientId());

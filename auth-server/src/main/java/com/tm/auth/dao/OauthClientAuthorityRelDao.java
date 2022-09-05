@@ -16,7 +16,5 @@ public interface OauthClientAuthorityRelDao {
      */
     List<OauthAuthority> getAuthorities(@Param("clientId") String clientId, @Param("targetId") String targetId);
 
-    int addAuthorities(List<OauthAuthority> authorityList);
-
-    int addClientAuthorityRel(List<OauthClientAuthorityRel> clientAuthorityRels);
+    int addClientAuthorityRel(@Param("authorityRels") List<OauthClientAuthorityRel> authorityRels);
 }

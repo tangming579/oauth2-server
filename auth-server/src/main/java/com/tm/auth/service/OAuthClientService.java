@@ -2,9 +2,11 @@ package com.tm.auth.service;
 
 import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
+import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.common.utils.SMUtils;
-import com.tm.auth.dto.AuthClientRequest;
-import com.tm.auth.dto.OauthClientDetailsDto;
+import com.tm.auth.dto.ClientCreateReq;
+import com.tm.auth.dto.ClientDetailsDto;
+import com.tm.auth.dto.ClientUpdateReq;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
@@ -20,7 +22,6 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -61,24 +63,36 @@ public class OAuthClientService implements ClientDetailsService {
     }
 
     @Transactional
-    public int createClient(AuthClientRequest authClientRequest) {
-        OauthClientDetails oauthClientDetails = new OauthClientDetails();
-        BeanUtils.copyProperties(authClientRequest, oauthClientDetails);
+    public int createClient(ClientCreateReq clientCreateReq) {
+        OauthClientDetails clientDetails = oauthClientDetailsMapper.selectByPrimaryKey(clientCreateReq.getClientId());
+        if (Objects.nonNull(clientDetails)) {
+            throw new OAuthExecption(String.format("应用%s已存在", clientDetails.getClientId()));
+        }
         //没传token有效期，使用默认有效期
-        if (authClientRequest.getAccessTokenValidity() == null)
-            authClientRequest.setAccessTokenValidity(access_token_validity_seconds);
+        if (clientCreateReq.getAccessTokenValiditySeconds() == null)
+            clientCreateReq.setAccessTokenValiditySeconds(access_token_validity_seconds);
+        OauthClientDetails oauthClientDetails = new OauthClientDetails();
+        BeanUtils.copyProperties(clientCreateReq, oauthClientDetails);
+
         //密码使用sm3 hash保存
-        String secret = authClientRequest.getClientSecret();
-        String pw = SMUtils.sm3HashHex(secret.getBytes(StandardCharsets.UTF_8));
-        oauthClientDetails.setClientSecret(pw);
+        String secret = clientCreateReq.getClientSecret();
+        String pwHash = SMUtils.sm3HashHex(secret.getBytes(StandardCharsets.UTF_8));
+        oauthClientDetails.setClientSecret(pwHash);
         oauthClientDetails.setCreateTime(new Date());
         //生成用于加解密jwt的密钥对
-        oAuthJwtService.generateKeyPair(authClientRequest.getClientId());
+        oAuthJwtService.generateKeyPair(clientCreateReq.getClientId());
         return oauthClientDetailsMapper.insert(oauthClientDetails);
     }
 
-    public int updateClient(OauthClientDetails oauthClientDetails) {
-        return oauthClientDetailsMapper.updateByPrimaryKey(oauthClientDetails);
+    public int updateClient(ClientUpdateReq clientUpdateReq) {
+        OauthClientDetails clientDetails = oauthClientDetailsMapper.selectByPrimaryKey(clientUpdateReq.getClientId());
+        if (Objects.isNull(clientDetails)) {
+            throw new OAuthExecption(String.format("应用%s不存在", clientDetails.getClientId()));
+        }
+        OauthClientDetails oauthClientDetails = new OauthClientDetails();
+        BeanUtils.copyProperties(clientUpdateReq, oauthClientDetails);
+        oauthClientDetails.setClientSecret(clientDetails.getClientSecret());
+        return oauthClientDetailsMapper.updateByPrimaryKeySelective(oauthClientDetails);
     }
 
     @Transactional
@@ -111,13 +125,13 @@ public class OAuthClientService implements ClientDetailsService {
         PageHelper.startPage(pageNum, pageSize);
         List<OauthClientDetails> oauthClientDetailsList = oauthClientDetailsMapper.selectByExample(new OauthClientDetailsExample());
         CommonPage<OauthClientDetails> pageInfo = CommonPage.restPage(oauthClientDetailsList);
-        List<OauthClientDetailsDto> oauthClientDetailsDtos = oauthClientDetailsList
+        List<ClientDetailsDto> clientDetailsDtos = oauthClientDetailsList
                 .stream().map(x -> {
-                    OauthClientDetailsDto dto = new OauthClientDetailsDto();
+                    ClientDetailsDto dto = new ClientDetailsDto();
                     BeanUtils.copyProperties(x, dto);
                     return dto;
                 }).collect(Collectors.toList());
-        CommonPage<OauthClientDetailsDto> pageInfoDto = CommonPage.restPage(oauthClientDetailsDtos);
+        CommonPage<ClientDetailsDto> pageInfoDto = CommonPage.restPage(clientDetailsDtos);
         pageInfoDto.setPageNum(pageInfo.getPageNum());
         pageInfoDto.setPageSize(pageInfo.getPageSize());
         pageInfoDto.setTotalPage(pageInfo.getTotalPage());

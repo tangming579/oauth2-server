@@ -1,9 +1,10 @@
 package com.tm.auth.api;
 
 import com.tm.auth.common.api.ApiResult;
-import com.tm.auth.dto.AuthoritiesRequest;
+import com.tm.auth.dto.AuthoritiesReq;
+import com.tm.auth.dto.ClientUpdateReq;
 import com.tm.auth.mbg.model.OauthClientDetails;
-import com.tm.auth.dto.AuthClientRequest;
+import com.tm.auth.dto.ClientCreateReq;
 import com.tm.auth.service.OAuthAuthorityService;
 import com.tm.auth.service.OAuthClientService;
 import io.swagger.annotations.Api;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
  * @date 2022/8/9
  */
 @RestController
-@RequestMapping("/oauth/client")
+@RequestMapping("/api/oauth/client")
 @Api("应用管理")
 @Slf4j
 public class ClientController {
@@ -31,8 +32,8 @@ public class ClientController {
     @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
-    public ApiResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
-        return ApiResult.success(clientService.createClient(authClientRequest));
+    public ApiResult create(@Valid @RequestBody ClientCreateReq clientCreateReq) {
+        return ApiResult.success(clientService.createClient(clientCreateReq));
     }
 
     @ApiOperation("删除应用")
@@ -45,8 +46,8 @@ public class ClientController {
     @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
-    public ApiResult update(@Valid @RequestBody OauthClientDetails authClientRequest) {
-        return ApiResult.success(clientService.updateClient(authClientRequest));
+    public ApiResult update(@Valid @RequestBody ClientUpdateReq clientDetailsRequest) {
+        return ApiResult.success(clientService.updateClient(clientDetailsRequest));
     }
 
     @ApiOperation("应用列表")
@@ -59,7 +60,7 @@ public class ClientController {
     @ApiOperation("修改应用权限")
     @PostMapping("/allocAuthorities")
     @ResponseBody
-    public ApiResult authorities(@Valid @RequestBody AuthoritiesRequest authoritiesRequest) {
-        return ApiResult.success(authorityService.allocAuthorities(authoritiesRequest));
+    public ApiResult authorities(@Valid @RequestBody AuthoritiesReq authoritiesReq) {
+        return ApiResult.success(authorityService.allocAuthorities(authoritiesReq));
     }
 }

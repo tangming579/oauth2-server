@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @date 2022/8/24
  */
 @Data
-public class AuthTokenRequest {
+public class AuthTokenReq {
     @NotBlank(message = "不能为空")
     private String clientId;
     @NotBlank(message = "不能为空")

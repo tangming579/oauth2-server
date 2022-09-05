@@ -12,19 +12,11 @@
         AND
         oa.target_id = #{targetId}
     </select>
-    <insert id="addAuthorities" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-        insert into public.oauth_authority (id, target_id, methods, paths)
-        values
-        <foreach collection="list" separator=",">
-            (#{id,jdbcType=BIGINT}, #{targetId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR},
-            #{paths,jdbcType=VARCHAR})
-        </foreach>
-    </insert>
     <insert id="addClientAuthorityRel" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-        insert into public.oauth_client_authority_rel (id, client_id, authority_id)
+        insert into public.oauth_client_authority_rel (client_id, authority_id)
         values
-        <foreach collection="list" separator=",">
-            values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=BIGINT} )
+        <foreach collection="authorityRels" item="value" separator=",">
+            (#{value.clientId,jdbcType=VARCHAR}, #{value.authorityId,jdbcType=BIGINT} )
         </foreach>
     </insert>
 </mapper>

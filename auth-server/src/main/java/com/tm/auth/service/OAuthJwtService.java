@@ -7,7 +7,7 @@ import com.tm.auth.common.gmJwt.SM2Signer;
 import com.tm.auth.common.gmJwt.SM2Verifier;
 import com.tm.auth.common.utils.JsonUtil;
 import com.tm.auth.common.utils.SMUtils;
-import com.tm.auth.dto.PublicKeyInfo;
+import com.tm.auth.dto.PublicKeyDto;
 import com.tm.auth.mbg.mapper.OauthClientKeypairMapper;
 import com.tm.auth.mbg.model.OauthClientKeypair;
 import com.tm.auth.mbg.model.OauthClientKeypairExample;
@@ -20,7 +20,6 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.codec.Codecs;
 import org.springframework.security.jwt.crypto.sign.InvalidSignatureException;
 import org.springframework.security.jwt.crypto.sign.Signer;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -88,14 +87,14 @@ public class OAuthJwtService {
         return getJwtKeypair(clientId).getPublicKey();
     }
 
-    public List<PublicKeyInfo> getJwtPublicKey(List<String> clientIds) {
+    public List<PublicKeyDto> getJwtPublicKey(List<String> clientIds) {
         OauthClientKeypairExample example = new OauthClientKeypairExample();
         if (!CollectionUtils.isEmpty(clientIds)) {
             example.createCriteria().andClientIdIn(clientIds);
         }
         return oauthClientKeypairMapper.selectByExample(example).stream()
                 .map(x -> {
-                    PublicKeyInfo info = new PublicKeyInfo();
+                    PublicKeyDto info = new PublicKeyDto();
                     info.setPublicKey(x.getPublicKey());
                     info.setClientId(x.getClientId());
                     return info;

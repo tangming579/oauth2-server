@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2022/8/30
  */
 @Data
-public class PublicKeyInfo {
+public class PublicKeyDto {
     private String clientId;
     private String publicKey;
 }
