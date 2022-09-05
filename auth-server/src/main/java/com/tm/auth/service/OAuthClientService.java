@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.utils.SMUtils;
 import com.tm.auth.dto.AuthClientRequest;
+import com.tm.auth.dto.OauthClientDetailsDto;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.mbg.model.OauthClientDetailsExample;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author tangming
@@ -106,7 +109,19 @@ public class OAuthClientService implements ClientDetailsService {
 
     public CommonPage listPageClient(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<OauthClientDetails> list = oauthClientDetailsMapper.selectByExample(new OauthClientDetailsExample());
-        return CommonPage.restPage(list);
+        List<OauthClientDetails> oauthClientDetailsList = oauthClientDetailsMapper.selectByExample(new OauthClientDetailsExample());
+        CommonPage<OauthClientDetails> pageInfo = CommonPage.restPage(oauthClientDetailsList);
+        List<OauthClientDetailsDto> oauthClientDetailsDtos = oauthClientDetailsList
+                .stream().map(x -> {
+                    OauthClientDetailsDto dto = new OauthClientDetailsDto();
+                    BeanUtils.copyProperties(x, dto);
+                    return dto;
+                }).collect(Collectors.toList());
+        CommonPage<OauthClientDetailsDto> pageInfoDto = CommonPage.restPage(oauthClientDetailsDtos);
+        pageInfoDto.setPageNum(pageInfo.getPageNum());
+        pageInfoDto.setPageSize(pageInfo.getPageSize());
+        pageInfoDto.setTotalPage(pageInfo.getTotalPage());
+        pageInfoDto.setTotal(pageInfo.getTotal());
+        return pageInfoDto;
     }
 }

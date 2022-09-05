@@ -1,6 +1,6 @@
 package com.tm.auth.api;
 
-import com.tm.auth.common.api.AipResult;
+import com.tm.auth.common.api.ApiResult;
 import com.tm.auth.dto.AuthTokenRequest;
 import com.tm.auth.service.OAuthJwtService;
 import io.swagger.annotations.Api;
@@ -53,7 +53,7 @@ public class OAuthController {
      */
     @ApiOperation("应用获取令牌")
     @PostMapping(value = "/token")
-    public AipResult getToken(@Valid @RequestBody AuthTokenRequest request) throws HttpRequestMethodNotSupportedException, IOException {
+    public ApiResult getToken(@Valid @RequestBody AuthTokenRequest request) throws HttpRequestMethodNotSupportedException, IOException {
         MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
         paramsMap.set("grant_type", "client_credentials");
         paramsMap.set("client_id", request.getClientId());
@@ -66,25 +66,25 @@ public class OAuthController {
         String url = String.format("http://127.0.0.1:%s/oauth/token", serverPort);
         OAuth2AccessToken response = restTemplate.postForObject(url, paramsMap, OAuth2AccessToken.class);
         OAuth2AccessToken oAuth2AccessToken = response;
-        return AipResult.success(oAuth2AccessToken);
+        return ApiResult.success(oAuth2AccessToken);
     }
 
     @ApiOperation("校验令牌")
     @PostMapping(value = "/check_token")
-    public AipResult checkToken(@RequestParam("token") String value) {
+    public ApiResult checkToken(@RequestParam("token") String value) {
         Map<String, ?> map = checkTokenEndpoint.checkToken(value);
-        return AipResult.success(map);
+        return ApiResult.success(map);
     }
 
     @ApiOperation("获取某个资源公钥")
     @GetMapping("/token_key")
-    public AipResult getKey(String clientId) {
-        return AipResult.success(oAuthJwtService.getJwtPublicKey(Collections.singletonList(clientId)));
+    public ApiResult getKey(String clientId) {
+        return ApiResult.success(oAuthJwtService.getJwtPublicKey(Collections.singletonList(clientId)));
     }
 
     @ApiOperation("获取所有资源公钥")
     @PostMapping("/token_key_all")
-    public AipResult getKeyAll() throws IOException {
-        return AipResult.success(oAuthJwtService.getJwtPublicKey(Collections.emptyList()));
+    public ApiResult getKeyAll() throws IOException {
+        return ApiResult.success(oAuthJwtService.getJwtPublicKey(Collections.emptyList()));
     }
 }

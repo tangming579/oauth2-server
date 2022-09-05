@@ -1,7 +1,6 @@
 package com.tm.auth.api;
 
-import com.tm.auth.common.api.CommonPage;
-import com.tm.auth.common.api.AipResult;
+import com.tm.auth.common.api.ApiResult;
 import com.tm.auth.dto.AuthoritiesRequest;
 import com.tm.auth.mbg.model.OauthClientDetails;
 import com.tm.auth.dto.AuthClientRequest;
@@ -32,35 +31,35 @@ public class ClientController {
     @ApiOperation("创建应用")
     @PostMapping("/create")
     @ResponseBody
-    public AipResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
-        return AipResult.success(clientService.createClient(authClientRequest));
+    public ApiResult create(@Valid @RequestBody AuthClientRequest authClientRequest) {
+        return ApiResult.success(clientService.createClient(authClientRequest));
     }
 
     @ApiOperation("删除应用")
     @PostMapping("/delete")
     @ResponseBody
-    public AipResult delete(String clientId) {
-        return AipResult.success(clientService.deleteClient(clientId));
+    public ApiResult delete(String clientId) {
+        return ApiResult.success(clientService.deleteClient(clientId));
     }
 
     @ApiOperation("修改应用")
     @PostMapping("/update")
     @ResponseBody
-    public AipResult update(@Valid @RequestBody OauthClientDetails authClientRequest) {
-        return AipResult.success(clientService.updateClient(authClientRequest));
+    public ApiResult update(@Valid @RequestBody OauthClientDetails authClientRequest) {
+        return ApiResult.success(clientService.updateClient(authClientRequest));
     }
 
     @ApiOperation("应用列表")
     @PostMapping("/list")
     @ResponseBody
-    public CommonPage list(int pageNum, int pageSize) {
-        return clientService.listPageClient(pageNum, pageSize);
+    public ApiResult list(int pageNum, int pageSize) {
+        return ApiResult.success(clientService.listPageClient(pageNum, pageSize));
     }
 
     @ApiOperation("修改应用权限")
     @PostMapping("/allocAuthorities")
     @ResponseBody
-    public AipResult authorities(@Valid @RequestBody AuthoritiesRequest authoritiesRequest) {
-        return AipResult.success(authorityService.allocAuthorities(authoritiesRequest));
+    public ApiResult authorities(@Valid @RequestBody AuthoritiesRequest authoritiesRequest) {
+        return ApiResult.success(authorityService.allocAuthorities(authoritiesRequest));
     }
 }

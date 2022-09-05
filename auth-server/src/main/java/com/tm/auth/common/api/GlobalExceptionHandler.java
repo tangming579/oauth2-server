@@ -2,10 +2,6 @@ package com.tm.auth.common.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.common.exceptions.BadClientCredentialsException;
-import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
-import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -25,7 +21,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public AipResult handleValidException(MethodArgumentNotValidException e) {
+    public ApiResult handleValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
@@ -34,11 +30,11 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return AipResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
+        return ApiResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
     }
 
     @ExceptionHandler(value = BindException.class)
-    public AipResult handleValidException(BindException e) {
+    public ApiResult handleValidException(BindException e) {
         log.error("error", e);
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
@@ -48,19 +44,19 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
-        return AipResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
+        return ApiResult.failed(ResultCode.VALIDATE_FAILED.getCode(), message);
     }
 
     @ExceptionHandler({Exception.class})
-    public AipResult handleException(Exception e) {
+    public ApiResult handleException(Exception e) {
         String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
-        return AipResult.failed(msg);
+        return ApiResult.failed(msg);
     }
 
     @ExceptionHandler({HttpClientErrorException.class})
-    public AipResult handleClientRegistrationException(HttpClientErrorException e) {
+    public ApiResult handleClientRegistrationException(HttpClientErrorException e) {
         if (e.getStatusCode() == HttpStatus.UNAUTHORIZED)
-            return AipResult.failed(ResultCode.UNAUTHORIZED);
-        return AipResult.failed(e.getMessage());
+            return ApiResult.failed(ResultCode.UNAUTHORIZED);
+        return ApiResult.failed(e.getMessage());
     }
 }
