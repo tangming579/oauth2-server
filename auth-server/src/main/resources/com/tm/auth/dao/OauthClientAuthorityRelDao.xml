@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tm.auth.dao.OauthClientAuthorityRelDao">
-    <select id="getPermissionList" resultMap="com.tm.auth.mbg.mapper.OauthAuthorityMapper.BaseResultMap">
+    <select id="getAuthorities" resultMap="com.tm.auth.mbg.mapper.OauthAuthorityMapper.BaseResultMap">
         SELECT
         oa.*
         FROM
@@ -12,4 +12,19 @@
         AND
         oa.target_id = #{targetId}
     </select>
+    <insert id="addAuthorities" parameterType="com.tm.auth.mbg.model.OauthAuthority">
+        insert into public.oauth_authority (id, target_id, methods, paths)
+        values
+        <foreach collection="list" separator=",">
+            (#{id,jdbcType=BIGINT}, #{targetId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR},
+            #{paths,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+    <insert id="addClientAuthorityRel" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
+        insert into public.oauth_client_authority_rel (id, client_id, authority_id)
+        values
+        <foreach collection="list" separator=",">
+            values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=BIGINT} )
+        </foreach>
+    </insert>
 </mapper>

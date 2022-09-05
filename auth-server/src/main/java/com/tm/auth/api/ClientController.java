@@ -58,9 +58,9 @@ public class ClientController {
     }
 
     @ApiOperation("修改应用权限")
-    @PostMapping("/authorities")
+    @PostMapping("/allocAuthorities")
     @ResponseBody
     public AipResult authorities(@Valid @RequestBody AuthoritiesRequest authoritiesRequest) {
-        return AipResult.success(authorityService.authorities(authoritiesRequest));
+        return AipResult.success(authorityService.allocAuthorities(authoritiesRequest));
     }
 }

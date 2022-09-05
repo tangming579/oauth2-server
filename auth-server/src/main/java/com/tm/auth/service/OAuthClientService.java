@@ -61,12 +61,15 @@ public class OAuthClientService implements ClientDetailsService {
     public int createClient(AuthClientRequest authClientRequest) {
         OauthClientDetails oauthClientDetails = new OauthClientDetails();
         BeanUtils.copyProperties(authClientRequest, oauthClientDetails);
+        //没传token有效期，使用默认有效期
         if (authClientRequest.getAccessTokenValidity() == null)
             authClientRequest.setAccessTokenValidity(access_token_validity_seconds);
+        //密码使用sm3 hash保存
         String secret = authClientRequest.getClientSecret();
         String pw = SMUtils.sm3HashHex(secret.getBytes(StandardCharsets.UTF_8));
         oauthClientDetails.setClientSecret(pw);
         oauthClientDetails.setCreateTime(new Date());
+        //生成用于加解密jwt的密钥对
         oAuthJwtService.generateKeyPair(authClientRequest.getClientId());
         return oauthClientDetailsMapper.insert(oauthClientDetails);
     }
@@ -75,7 +78,10 @@ public class OAuthClientService implements ClientDetailsService {
         return oauthClientDetailsMapper.updateByPrimaryKey(oauthClientDetails);
     }
 
+    @Transactional
     public int deleteClient(String clientId) {
+        oAuthJwtService.deleteJwtKeypair(clientId);
+        oAuthAuthorityService.deleteAuthorities(clientId);
         return oauthClientDetailsMapper.deleteByPrimaryKey(clientId);
     }
 
@@ -89,7 +95,7 @@ public class OAuthClientService implements ClientDetailsService {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
-        List<Authority> authorities = Collections.singletonList(oAuthAuthorityService.getAuthoritiesByClientId(clientId, targetId));
+        List<Authority> authorities = Collections.singletonList(oAuthAuthorityService.getAuthorities(clientId, targetId));
         clientDetails.setAuthorities(authorities);
         return clientDetails;
     }

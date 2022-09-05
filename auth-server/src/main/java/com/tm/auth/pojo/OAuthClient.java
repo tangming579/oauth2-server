@@ -1,5 +1,6 @@
 package com.tm.auth.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -24,12 +25,14 @@ public class OAuthClient implements ClientDetails {
      * 客户端密钥
      */
     @NotBlank(message = "客户端密码不能为空")
+    @JsonIgnore
     private String clientSecret;
 
     /**
      * 资源id集合
      */
     @NotNull(message = "授权范围不能为空")
+    @JsonIgnore
     private Set<String> resourceIds = new LinkedHashSet<>(0);
 
     /**
@@ -43,12 +46,14 @@ public class OAuthClient implements ClientDetails {
      * accessToken 刷新时间
      * 单位:秒
      */
+    @JsonIgnore
     private Integer refreshTokenValiditySeconds;
 
     /**
      * 授权类型
      * client_credentials 客户端模式
      */
+    @JsonIgnore
     @NotBlank(message = "授权类型不能为空")
     private String authorizedGrantTypes;
 
