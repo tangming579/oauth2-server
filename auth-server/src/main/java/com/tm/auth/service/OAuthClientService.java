@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.common.utils.SMUtils;
+import com.tm.auth.dto.AuthorityDto;
 import com.tm.auth.dto.ClientCreateReq;
 import com.tm.auth.dto.ClientDetailsDto;
 import com.tm.auth.dto.ClientUpdateReq;
@@ -53,6 +54,7 @@ public class OAuthClientService implements ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         try {
             //获取请求中的targetId，用于获取目标权限
+            //服务申请令牌需要指定访问的目标服务id，否则token中的权限信息可能过多
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String targetId = request.getParameter("target_id");
             return getClientDetailsWithAuthorities(clientId, targetId);
@@ -106,13 +108,20 @@ public class OAuthClientService implements ClientDetailsService {
         return oauthClientDetailsMapper.selectByPrimaryKey(clientId);
     }
 
+    /**
+     * 获取应用信息及应用权限，用于生成 jwt 令牌
+     *
+     * @param clientId
+     * @param targetId
+     * @return
+     */
     public OAuthClient getClientDetailsWithAuthorities(String clientId, String targetId) {
         OauthClientDetails oauthClientDetails = getClient(clientId);
         if (oauthClientDetails == null)
             throw new NoSuchClientException("No client with requested id: " + clientId);
         OAuthClient clientDetails = new OAuthClient();
         BeanUtils.copyProperties(oauthClientDetails, clientDetails);
-        List<Authority> authorities = Collections.singletonList(oAuthAuthorityService.getAuthorities(clientId, targetId));
+        List<Authority> authorities = Collections.singletonList(oAuthAuthorityService.getClientAuthorities(clientId, targetId));
         clientDetails.setAuthorities(authorities);
         return clientDetails;
     }

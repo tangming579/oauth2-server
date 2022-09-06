@@ -98,19 +98,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      Postgresql
-    </selectKey>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tm.auth.mbg.model.OauthAuthority" useGeneratedKeys="true">
     insert into public.oauth_authority (target_id, methods, paths
       )
     values (#{targetId,jdbcType=VARCHAR}, #{methods,jdbcType=VARCHAR}, #{paths,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthAuthority">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      Postgresql
-    </selectKey>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.tm.auth.mbg.model.OauthAuthority" useGeneratedKeys="true">
     insert into public.oauth_authority
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="targetId != null">

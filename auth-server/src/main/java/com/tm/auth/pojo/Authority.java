@@ -3,6 +3,7 @@ package com.tm.auth.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
 import com.tm.auth.common.utils.JsonUtil;
+import com.tm.auth.dto.OauthAuthorityDto;
 import com.tm.auth.mbg.model.OauthAuthority;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Data
 public class Authority implements GrantedAuthority {
     private String targetId;
-    private List<OauthAuthority> targetRules;
+    private List<OauthAuthorityDto> targetRules;
 
     public Authority() {
         targetRules = new ArrayList<>();
@@ -33,8 +34,6 @@ public class Authority implements GrantedAuthority {
     public String getAuthority() {
         if (StringUtils.isEmpty(targetId) && CollectionUtils.isEmpty(targetRules))
             return null;
-        if (StringUtils.isEmpty(targetId))
-            targetId = targetRules.get(0).getTargetId();
         Map<String, Object> authInfo = Maps.newHashMap();
         authInfo.put("targetId", targetId);
         if (!CollectionUtils.isEmpty(targetRules)) {

@@ -1,22 +1,23 @@
 package com.tm.auth.service;
 
+import com.github.pagehelper.util.StringUtil;
 import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.dao.OauthClientAuthorityRelDao;
 import com.tm.auth.dto.AuthoritiesReq;
+import com.tm.auth.dto.AuthorityDto;
+import com.tm.auth.dto.OauthAuthorityDto;
 import com.tm.auth.mbg.mapper.OauthAuthorityMapper;
 import com.tm.auth.mbg.mapper.OauthClientAuthorityRelMapper;
 import com.tm.auth.mbg.mapper.OauthClientDetailsMapper;
 import com.tm.auth.mbg.model.*;
 import com.tm.auth.pojo.Authority;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +36,7 @@ public class OAuthAuthorityService {
     private OauthClientAuthorityRelMapper clientAuthorityRelMapper;
 
     @Transactional
-    public int allocAuthorities(AuthoritiesReq authoritiesReq) {
+    public int allocClientAuthorities(AuthoritiesReq authoritiesReq) {
         OauthClientDetails clientDetails = clientDetailsMapper.selectByPrimaryKey(authoritiesReq.getClientId());
         if (clientDetails == null)
             throw new OAuthExecption("不存在的应用" + authoritiesReq.getClientId());
@@ -49,19 +50,21 @@ public class OAuthAuthorityService {
             authorityExample.createCriteria().andIdIn(clientAuthorityRels.stream().map(OauthClientAuthorityRel::getAuthorityId).collect(Collectors.toList()));
             authorityMapper.deleteByExample(authorityExample);
         }
-        if (authoritiesReq.getAuthorities() == null) {
+        if (CollectionUtils.isEmpty(authoritiesReq.getAuthorities())) {
             return 1;
         }
         //插入新关系
         List<OauthClientAuthorityRel> clientAuthorityRelList = new ArrayList<>();
         for (Authority authority : authoritiesReq.getAuthorities()) {
-            for (OauthAuthority oauthAuthority : authority.getTargetRules()) {
+            for (OauthAuthorityDto oauthAuthorityDto : authority.getTargetRules()) {
+                OauthAuthority oauthAuthority = new OauthAuthority();
+                BeanUtils.copyProperties(oauthAuthorityDto, oauthAuthority);
                 oauthAuthority.setTargetId(authority.getTargetId());
-                Integer id = authorityMapper.insertSelective(oauthAuthority);
+                authorityMapper.insertSelective(oauthAuthority);
 
                 OauthClientAuthorityRel rel = new OauthClientAuthorityRel();
                 rel.setClientId(authoritiesReq.getClientId());
-                rel.setAuthorityId((long) id);
+                rel.setAuthorityId(oauthAuthority.getId());
                 clientAuthorityRelList.add(rel);
             }
         }
@@ -90,11 +93,40 @@ public class OAuthAuthorityService {
      * @param targetId 权限目标应用id
      * @return
      */
-    public Authority getAuthorities(String clientId, String targetId) {
-        Optional<List<OauthAuthority>> authorities = Optional.ofNullable(authorityRelDao.getAuthorities(clientId, targetId));
-        Authority authority = new Authority();
+    public Authority getClientAuthorities(String clientId, String targetId) {
+        List<OauthAuthority> authorities = authorityRelDao.getAuthorities(clientId, targetId);
+        if (CollectionUtils.isEmpty(authorities)) {
+            return null;
+        }
+        Authority authority=new Authority();
         authority.setTargetId(targetId);
-        authority.setTargetRules(authorities.get());
+        authority.setTargetRules(authorities.stream().map(x->{
+            OauthAuthorityDto authorityDto = new OauthAuthorityDto();
+            BeanUtils.copyProperties(x, authorityDto);
+            return authorityDto;
+        }).collect(Collectors.toList()));
         return authority;
+    }
+
+    public List<Authority> getClientAuthorities(String clientId) {
+        List<OauthAuthority> authorities = authorityRelDao.getAuthoritiesAll(clientId);
+        if (CollectionUtils.isEmpty(authorities)) {
+            return null;
+        }
+        List<Authority> authorityList = new ArrayList<>();
+        authorities.stream().collect(
+                        Collectors.groupingBy(OauthAuthority::getTargetId, TreeMap::new, Collectors.toList()))
+                .forEach((key, list) -> {
+                    Authority authority = new Authority();
+                    authority.setTargetId(key);
+                    authority.setTargetRules(list.stream().map(x -> {
+                        OauthAuthorityDto authorityDto = new OauthAuthorityDto();
+                        BeanUtils.copyProperties(x, authorityDto);
+                        return authorityDto;
+                    }).collect(Collectors.toList()));
+                    authorityList.add(authority);
+                });
+
+        return authorityList;
     }
 }

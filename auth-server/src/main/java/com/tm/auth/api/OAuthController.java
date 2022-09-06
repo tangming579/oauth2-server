@@ -2,6 +2,7 @@ package com.tm.auth.api;
 
 import com.tm.auth.common.api.ApiResult;
 import com.tm.auth.dto.AuthTokenReq;
+import com.tm.auth.service.OAuthAuthorityService;
 import com.tm.auth.service.OAuthJwtService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +39,8 @@ public class OAuthController {
     private CheckTokenEndpoint checkTokenEndpoint;
     @Autowired
     private OAuthJwtService oAuthJwtService;
+    @Autowired
+    private OAuthAuthorityService authorityService;
     @Value("${server.port}")
     private Integer serverPort;
 
@@ -51,7 +54,7 @@ public class OAuthController {
      * @return
      * @throws HttpRequestMethodNotSupportedException
      */
-    @ApiOperation("应用获取令牌")
+    @ApiOperation("获取令牌")
     @PostMapping(value = "/token")
     public ApiResult getToken(@Valid @RequestBody AuthTokenReq request) throws HttpRequestMethodNotSupportedException, IOException {
         MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
@@ -84,7 +87,14 @@ public class OAuthController {
 
     @ApiOperation("获取所有资源公钥")
     @PostMapping("/token_key_all")
-    public ApiResult getKeyAll() throws IOException {
+    public ApiResult getKeyAll() {
         return ApiResult.success(oAuthJwtService.getJwtPublicKey(Collections.emptyList()));
+    }
+
+    @ApiOperation("获取应用权限列表")
+    @PostMapping("/getAuthorities")
+    @ResponseBody
+    public ApiResult getAuthorities(String clientId, String targetId) {
+        return ApiResult.success(authorityService.getClientAuthorities(clientId, targetId));
     }
 }

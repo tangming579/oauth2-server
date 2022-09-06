@@ -41,7 +41,7 @@
         <!--生成全部表tableName设为%-->
         <table schema="public" tableName="oauth_client_details" delimitIdentifiers="false"/>
         <table schema="public" tableName="oauth_authority" delimitIdentifiers="false">
-            <generatedKey column="id" sqlStatement="Postgresql" identity="true" />
+            <generatedKey column="id" sqlStatement="JDBC" identity="true" />
         </table>
         <table schema="public" tableName="oauth_client_authority_rel" delimitIdentifiers="false"/>
         <table schema="public" tableName="oauth_client_keypair" delimitIdentifiers="false"/>

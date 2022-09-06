@@ -60,7 +60,14 @@ public class ClientController {
     @ApiOperation("修改应用权限")
     @PostMapping("/allocAuthorities")
     @ResponseBody
-    public ApiResult authorities(@Valid @RequestBody AuthoritiesReq authoritiesReq) {
-        return ApiResult.success(authorityService.allocAuthorities(authoritiesReq));
+    public ApiResult allocAuthorities(@Valid @RequestBody AuthoritiesReq authoritiesReq) {
+        return ApiResult.success(authorityService.allocClientAuthorities(authoritiesReq));
+    }
+
+    @ApiOperation("获取应用权限")
+    @PostMapping("/getAuthorities")
+    @ResponseBody
+    public ApiResult getAuthorities(String clientId) {
+        return ApiResult.success(authorityService.getClientAuthorities(clientId));
     }
 }

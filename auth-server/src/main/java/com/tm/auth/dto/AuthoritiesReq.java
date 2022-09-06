@@ -14,6 +14,5 @@ import java.util.List;
 public class AuthoritiesReq {
     @NotBlank(message = "不能为空")
     private String clientId;
-
     private List<Authority> authorities;
 }
