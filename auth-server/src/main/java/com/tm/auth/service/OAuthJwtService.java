@@ -199,21 +199,21 @@ public class OAuthJwtService {
     }
 
     /**
-     * 框架默认 allocAuthorities 的内容是字符串数组，需要改成项目中的json数组
+     * 框架默认 authorities 的内容是字符串数组，需要改成项目中的json数组
      *
      * @param claims
      * @return
      */
     private byte[] convertAuthStrToJson(byte[] claims) {
         Map<String, Object> node = JsonUtil.parseMap(new String(claims));
-        List<String> au = (List<String>) node.get("allocAuthorities");
+        List<String> au = (List<String>) node.get("authorities");
         if (Objects.isNull(au)) return claims;
         List<Authority> authorities = new ArrayList<>();
         for (String auth : au) {
             Authority authority = JsonUtil.parseObject(auth, Authority.class);
             authorities.add(authority);
         }
-        node.put("allocAuthorities", authorities);
+        node.put("authorities", authorities);
         claims = JsonUtil.toJsonString(node).getBytes();
         return claims;
     }

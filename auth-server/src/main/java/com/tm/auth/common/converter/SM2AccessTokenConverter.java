@@ -24,9 +24,9 @@ public class SM2AccessTokenConverter extends DefaultAccessTokenConverter {
         String clientId = (String) map.get(this.clientIdAttribute);
         parameters.put(this.clientIdAttribute, clientId);
         Collection<? extends GrantedAuthority> authorities = null;
-        if (map.containsKey("allocAuthorities")) {
-            //String[] roles = (String[])((Collection)map.get("allocAuthorities")).toArray(new String[0]);
-            //allocAuthorities = AuthorityUtils.createAuthorityList(roles);
+        if (map.containsKey("authorities")) {
+            //String[] roles = (String[])((Collection)map.get("authorities")).toArray(new String[0]);
+            //authorities = AuthorityUtils.createAuthorityList(roles);
         }
 
         OAuth2Request request = new OAuth2Request(parameters, clientId, authorities, true, null, null, (String) null, null, null);
