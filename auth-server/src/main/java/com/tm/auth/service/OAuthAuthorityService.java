@@ -2,6 +2,7 @@ package com.tm.auth.service;
 
 import com.github.pagehelper.util.StringUtil;
 import com.tm.auth.common.api.OAuthExecption;
+import com.tm.auth.common.utils.JsonUtil;
 import com.tm.auth.dao.OauthClientAuthorityRelDao;
 import com.tm.auth.dto.AuthoritiesReq;
 import com.tm.auth.dto.AuthorityDto;
@@ -35,12 +36,18 @@ public class OAuthAuthorityService {
     @Autowired
     private OauthClientAuthorityRelMapper clientAuthorityRelMapper;
 
+    /**
+     * 配置应用权限信息
+     *
+     * @param authoritiesReq
+     * @return
+     */
     @Transactional
     public int allocClientAuthorities(AuthoritiesReq authoritiesReq) {
         OauthClientDetails clientDetails = clientDetailsMapper.selectByPrimaryKey(authoritiesReq.getClientId());
         if (clientDetails == null)
             throw new OAuthExecption("不存在的应用" + authoritiesReq.getClientId());
-        //先删除原有关系
+        //先删除原有权限
         OauthClientAuthorityRelExample clientAuthorityRelExample = new OauthClientAuthorityRelExample();
         clientAuthorityRelExample.createCriteria().andClientIdEqualTo(authoritiesReq.getClientId());
         List<OauthClientAuthorityRel> clientAuthorityRels = clientAuthorityRelMapper.selectByExample(clientAuthorityRelExample);
@@ -53,7 +60,7 @@ public class OAuthAuthorityService {
         if (CollectionUtils.isEmpty(authoritiesReq.getAuthorities())) {
             return 1;
         }
-        //插入新关系
+        //插入新权限
         List<OauthClientAuthorityRel> clientAuthorityRelList = new ArrayList<>();
         for (Authority authority : authoritiesReq.getAuthorities()) {
             for (OauthAuthorityDto oauthAuthorityDto : authority.getTargetRules()) {
@@ -72,6 +79,12 @@ public class OAuthAuthorityService {
         return 1;
     }
 
+    /**
+     * 删除应用权限信息
+     *
+     * @param clientId
+     * @return
+     */
     @Transactional
     public int deleteAuthorities(String clientId) {
         OauthClientAuthorityRelExample clientAuthorityRelExample = new OauthClientAuthorityRelExample();
@@ -98,9 +111,9 @@ public class OAuthAuthorityService {
         if (CollectionUtils.isEmpty(authorities)) {
             return null;
         }
-        Authority authority=new Authority();
+        Authority authority = new Authority();
         authority.setTargetId(targetId);
-        authority.setTargetRules(authorities.stream().map(x->{
+        authority.setTargetRules(authorities.stream().map(x -> {
             OauthAuthorityDto authorityDto = new OauthAuthorityDto();
             BeanUtils.copyProperties(x, authorityDto);
             return authorityDto;
@@ -108,6 +121,12 @@ public class OAuthAuthorityService {
         return authority;
     }
 
+    /**
+     * 获取应用所有权限信息
+     *
+     * @param clientId
+     * @return
+     */
     public List<Authority> getClientAuthorities(String clientId) {
         List<OauthAuthority> authorities = authorityRelDao.getAuthoritiesAll(clientId);
         if (CollectionUtils.isEmpty(authorities)) {

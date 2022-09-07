@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.tm.auth.common.api.CommonPage;
 import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.common.utils.SMUtils;
+import com.tm.auth.config.OAuthProperties;
 import com.tm.auth.dto.AuthorityDto;
 import com.tm.auth.dto.ClientCreateReq;
 import com.tm.auth.dto.ClientDetailsDto;
@@ -41,8 +42,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class OAuthClientService implements ClientDetailsService {
-    @Value("${paas.auth.access-token-validity-seconds}")
-    private Integer access_token_validity_seconds;
+    @Autowired
+    private OAuthProperties oAuthProperties;
     @Autowired
     private OauthClientDetailsMapper oauthClientDetailsMapper;
     @Autowired
@@ -72,7 +73,7 @@ public class OAuthClientService implements ClientDetailsService {
         }
         //没传token有效期，使用默认有效期
         if (clientCreateReq.getAccessTokenValiditySeconds() == null)
-            clientCreateReq.setAccessTokenValiditySeconds(access_token_validity_seconds);
+            clientCreateReq.setAccessTokenValiditySeconds(oAuthProperties.tokenValiditySecondsDefault);
         OauthClientDetails oauthClientDetails = new OauthClientDetails();
         BeanUtils.copyProperties(clientCreateReq, oauthClientDetails);
 

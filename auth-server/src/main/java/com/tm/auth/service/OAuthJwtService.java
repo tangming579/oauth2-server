@@ -7,6 +7,7 @@ import com.tm.auth.common.gmJwt.SM2Signer;
 import com.tm.auth.common.gmJwt.SM2Verifier;
 import com.tm.auth.common.utils.JsonUtil;
 import com.tm.auth.common.utils.SMUtils;
+import com.tm.auth.config.OAuthProperties;
 import com.tm.auth.dto.PublicKeyDto;
 import com.tm.auth.mbg.mapper.OauthClientKeypairMapper;
 import com.tm.auth.mbg.model.OauthClientKeypair;
@@ -36,14 +37,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OAuthJwtService {
     private static final byte JWT_PART_SEPARATOR = (byte) '.';
-    public static final String TOKEN_EXP = "exp";
-    public static final String TOKEN_TYP = "JWT_PAAS";
-    public static final String TOKEN_ALG = "SM3withSM2";
-    public static final String TOKEN_CLIENT_ID = "client_id";
-    public static final byte[] TOKEN_HEADER;
+    private static final String TOKEN_EXP = "exp";
+    //权限验证方式，0 解析token中authorities验证； 1调用授权服务接口在线验证
+    private static final String TOKEN_AUT = "autype";
+    private static final String TOKEN_TYP = "JWT_PAAS";
+    private static final String TOKEN_ALG = "SM3withSM2";
+    private static final String TOKEN_CLIENT_ID = "client_id";
+    private static final String TOKEN_AUTH = "authorities";
+    private static final byte[] TOKEN_HEADER;
     private static final int TOKEN_MAX_CLOCK_SKEW = 60;
     @Autowired
-    OauthClientKeypairMapper oauthClientKeypairMapper;
+    private OauthClientKeypairMapper oauthClientKeypairMapper;
+    @Autowired
+    private OAuthProperties oAuthProperties;
 
     static {
         TOKEN_HEADER = createJwtHeader().getBytes();
@@ -206,14 +212,21 @@ public class OAuthJwtService {
      */
     private byte[] convertAuthStrToJson(byte[] claims) {
         Map<String, Object> node = JsonUtil.parseMap(new String(claims));
-        List<String> au = (List<String>) node.get("authorities");
+        List<String> au = (List<String>) node.get(TOKEN_AUTH);
         if (Objects.isNull(au)) return claims;
         List<Authority> authorities = new ArrayList<>();
         for (String auth : au) {
             Authority authority = JsonUtil.parseObject(auth, Authority.class);
             authorities.add(authority);
         }
-        node.put("authorities", authorities);
+        int authoritiesLength = JsonUtil.toJsonString(authorities).length();
+        if (authoritiesLength <= oAuthProperties.tokenAuthoritiesMaxLength) {
+            node.put(TOKEN_AUTH, authorities);
+            node.put(TOKEN_AUT, 0);
+        } else {
+            node.put(TOKEN_AUTH, null);
+            node.put(TOKEN_AUT, 1);
+        }
         claims = JsonUtil.toJsonString(node).getBytes();
         return claims;
     }

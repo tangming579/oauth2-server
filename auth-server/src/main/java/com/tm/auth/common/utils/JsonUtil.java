@@ -57,6 +57,15 @@ public class JsonUtil {
         }
     }
 
+    public static Map<String, Object> parseMap(Object object) {
+        try {
+            String json = mapper.writeValueAsString(object);
+            return mapper.readValue(json, Map.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static <T> List<T> parseList(String json, Class<T> tClass) {
         try {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, tClass);
