@@ -13,7 +13,7 @@ public enum ResultCode {
     UNAUTHORIZED(100003, "未经许可的客户端，请检查id和secret"),
     OFFLINE(100004, "应用不处于上线状态"),
     TOKEN_ILLEGAL(100005, "token非法"),
-    TOKEN_EXPIRED(100006, "token过期"),
+    TOKEN_EXPIRED(100006, "token已过期"),
     PERMISSION_FAILED(100007, "获取应用具有的权限列表失败"),
     FORBIDDEN(100008, "权限不足，拒绝访问");
     private long code;

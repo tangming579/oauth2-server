@@ -1,8 +1,10 @@
 package com.tm.auth.config;
 
+import com.tm.auth.common.api.OAuthExceptionTranslator;
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.common.gmJwt.SM3PasswordEncoder;
 import com.tm.auth.service.OAuthClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -37,7 +39,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     private AuthenticationManager authenticationManager;
     @Resource
-    OAuthClientService clientService;
+    private OAuthClientService clientService;
+    @Autowired
+    private OAuthExceptionTranslator providerExceptionHandler;
 
 
     /**
@@ -85,9 +89,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         endpoints.authenticationManager(authenticationManager)
                 // 设置检验token 服务配置
-                .tokenServices(tokenServices());
+                .tokenServices(tokenServices())
                 // 自定义异常翻译器
-                //.exceptionTranslator(providerExceptionHandler);
+                .exceptionTranslator(providerExceptionHandler);
     }
 
     @Bean

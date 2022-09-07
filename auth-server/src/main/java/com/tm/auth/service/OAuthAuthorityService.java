@@ -107,11 +107,12 @@ public class OAuthAuthorityService {
      * @return
      */
     public Authority getClientAuthorities(String clientId, String targetId) {
+        Authority authority = new Authority();
         List<OauthAuthority> authorities = authorityRelDao.getAuthorities(clientId, targetId);
         if (CollectionUtils.isEmpty(authorities)) {
-            return null;
+            return authority;
         }
-        Authority authority = new Authority();
+
         authority.setTargetId(targetId);
         authority.setTargetRules(authorities.stream().map(x -> {
             OauthAuthorityDto authorityDto = new OauthAuthorityDto();

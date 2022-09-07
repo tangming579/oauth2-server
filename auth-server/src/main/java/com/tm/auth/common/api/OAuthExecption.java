@@ -1,9 +1,12 @@
 package com.tm.auth.common.api;
 
+import lombok.Data;
+
 /**
  * @author tangming
  * @date 2022/8/26
  */
+@Data
 public class OAuthExecption extends RuntimeException {
     private int status;
 

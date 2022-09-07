@@ -1,9 +1,12 @@
 package com.tm.auth.common.gmJwt;
 
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
+import com.tm.auth.common.api.OAuthExecption;
+import com.tm.auth.common.api.ResultCode;
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.utils.JsonUtil;
 import com.tm.auth.common.utils.SMUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.springframework.security.jwt.crypto.sign.InvalidSignatureException;
@@ -18,6 +21,7 @@ import java.util.Map;
  * @author tangming
  * @date 2022/8/22
  */
+@Slf4j
 public class SM2Verifier implements SignatureVerifier {
     private final ECPublicKeyParameters key;
     private final String algorithm;
@@ -49,10 +53,11 @@ public class SM2Verifier implements SignatureVerifier {
         try {
             boolean verifyResult = SM2Util.verify(key, content, sig);
             if (!verifyResult) {
-                throw new InvalidSignatureException("SM2 Signature did not match content");
+                log.error("SM2 token校验失败");
+                throw new OAuthExecption(ResultCode.TOKEN_ILLEGAL.getMessage(), (int) ResultCode.TOKEN_ILLEGAL.getCode());
             }
         } catch (Exception e) {
-            throw new InvalidSignatureException("SM2 Signature did not match content");
+            throw new OAuthExecption(ResultCode.TOKEN_ILLEGAL.getMessage(), (int) ResultCode.TOKEN_ILLEGAL.getCode());
         }
     }
 

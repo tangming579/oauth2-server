@@ -2,6 +2,7 @@ package com.tm.auth.common.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.jwt.crypto.sign.InvalidSignatureException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,17 @@ public class GlobalExceptionHandler {
     public ApiResult handleException(Exception e) {
         String msg = StringUtils.hasText(e.getMessage()) ? e.getMessage() : e.toString();
         return ApiResult.failed(msg);
+    }
+
+    @ExceptionHandler({InvalidSignatureException.class})
+    public ApiResult handleClientRegistrationException(InvalidSignatureException e) {
+        return ApiResult.failed(ResultCode.TOKEN_ILLEGAL.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler({OAuthExecption.class})
+    public ApiResult handleClientRegistrationException(OAuthExecption e) {
+        int status = e.getStatus() == 0 ? -1 : e.getStatus();
+        return ApiResult.failed(status, e.getMessage());
     }
 
     @ExceptionHandler({HttpClientErrorException.class})

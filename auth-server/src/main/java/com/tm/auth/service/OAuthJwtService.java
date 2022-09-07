@@ -2,6 +2,7 @@ package com.tm.auth.service;
 
 import com.nimbusds.jwt.util.DateUtils;
 import com.tm.auth.common.api.OAuthExecption;
+import com.tm.auth.common.api.ResultCode;
 import com.tm.auth.common.gmJwt.SM2JwtImpl;
 import com.tm.auth.common.gmJwt.SM2Signer;
 import com.tm.auth.common.gmJwt.SM2Verifier;
@@ -127,7 +128,7 @@ public class OAuthJwtService {
             Date now = new Date();
             Date exp = DateUtils.fromSecondsSinceEpoch(((Number) intValue).longValue());
             if (!DateUtils.isAfter(exp, now, TOKEN_MAX_CLOCK_SKEW)) {
-                throw new InvalidSignatureException("Expired JWT");
+                throw new OAuthExecption(ResultCode.TOKEN_EXPIRED.getMessage(), (int) ResultCode.TOKEN_EXPIRED.getCode());
             }
         }
         return claims;
@@ -212,8 +213,11 @@ public class OAuthJwtService {
      */
     private byte[] convertAuthStrToJson(byte[] claims) {
         Map<String, Object> node = JsonUtil.parseMap(new String(claims));
-        List<String> au = (List<String>) node.get(TOKEN_AUTH);
-        if (Objects.isNull(au)) return claims;
+        node.put(TOKEN_AUT, 0);
+        Object objAuth = node.get(TOKEN_AUTH);
+        if (Objects.isNull(objAuth)) return claims;
+        List<String> au = (List<String>) objAuth;
+        if (CollectionUtils.isEmpty(au)) return claims;
         List<Authority> authorities = new ArrayList<>();
         for (String auth : au) {
             Authority authority = JsonUtil.parseObject(auth, Authority.class);
