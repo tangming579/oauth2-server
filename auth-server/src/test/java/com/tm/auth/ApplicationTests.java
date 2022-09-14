@@ -1,8 +1,10 @@
 package com.tm.auth;
 
+import com.google.common.collect.Lists;
 import com.tm.auth.common.gmUtils.BCECUtil;
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.gmUtils.SM4Util;
+import lombok.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
@@ -11,7 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @SpringBootTest
 class ApplicationTests {
@@ -20,7 +27,8 @@ class ApplicationTests {
     void contextLoads() {
     }
 
-    private static final String EPIDEMIC_KEY = "6641F1CF0F312C7DE0BA269C1C47394D";
+    private static final String EPIDEMIC_KEY = "8641F1CF0F312C7DE0BA269C1C47394C";
+
     @Test
     void jwtTest2() {
         try {

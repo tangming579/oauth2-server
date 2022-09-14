@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tm.auth.mbg.mapper.OauthClientAuthorityRelMapper">
-  <resultMap id="BaseResultMap" type="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
-    <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
+<mapper namespace="com.tm.auth.mbg.mapper.OauthClientKeypairMapper">
+  <resultMap id="BaseResultMap" type="com.tm.auth.mbg.model.OauthClientKeypair">
+    <id column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, client_id, authority_id
+    client_id, public_key, private_key
   </sql>
-  <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRelExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.tm.auth.mbg.model.OauthClientKeypairExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from public.oauth_client_authority_rel
+    from public.oauth_client_keypair
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,70 +81,70 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from public.oauth_client_authority_rel
-    where id = #{id,jdbcType=BIGINT}
+    from public.oauth_client_keypair
+    where client_id = #{clientId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from public.oauth_client_authority_rel
-    where id = #{id,jdbcType=BIGINT}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from public.oauth_client_keypair
+    where client_id = #{clientId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRelExample">
-    delete from public.oauth_client_authority_rel
+  <delete id="deleteByExample" parameterType="com.tm.auth.mbg.model.OauthClientKeypairExample">
+    delete from public.oauth_client_keypair
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    insert into public.oauth_client_authority_rel (id, client_id, authority_id
+  <insert id="insert" parameterType="com.tm.auth.mbg.model.OauthClientKeypair">
+    insert into public.oauth_client_keypair (client_id, public_key, private_key
       )
-    values (#{id,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{authorityId,jdbcType=BIGINT}
+    values (#{clientId,jdbcType=VARCHAR}, #{publicKey,jdbcType=VARCHAR}, #{privateKey,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    insert into public.oauth_client_authority_rel
+  <insert id="insertSelective" parameterType="com.tm.auth.mbg.model.OauthClientKeypair">
+    insert into public.oauth_client_keypair
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="clientId != null">
         client_id,
       </if>
-      <if test="authorityId != null">
-        authority_id,
+      <if test="publicKey != null">
+        public_key,
+      </if>
+      <if test="privateKey != null">
+        private_key,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="clientId != null">
         #{clientId,jdbcType=VARCHAR},
       </if>
-      <if test="authorityId != null">
-        #{authorityId,jdbcType=BIGINT},
+      <if test="publicKey != null">
+        #{publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKey != null">
+        #{privateKey,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRelExample" resultType="java.lang.Long">
-    select count(*) from public.oauth_client_authority_rel
+  <select id="countByExample" parameterType="com.tm.auth.mbg.model.OauthClientKeypairExample" resultType="java.lang.Long">
+    select count(*) from public.oauth_client_keypair
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update public.oauth_client_authority_rel
+    update public.oauth_client_keypair
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
-      </if>
       <if test="record.clientId != null">
         client_id = #{record.clientId,jdbcType=VARCHAR},
       </if>
-      <if test="record.authorityId != null">
-        authority_id = #{record.authorityId,jdbcType=BIGINT},
+      <if test="record.publicKey != null">
+        public_key = #{record.publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.privateKey != null">
+        private_key = #{record.privateKey,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,30 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update public.oauth_client_authority_rel
-    set id = #{record.id,jdbcType=BIGINT},
-      client_id = #{record.clientId,jdbcType=VARCHAR},
-      authority_id = #{record.authorityId,jdbcType=BIGINT}
+    update public.oauth_client_keypair
+    set client_id = #{record.clientId,jdbcType=VARCHAR},
+      public_key = #{record.publicKey,jdbcType=VARCHAR},
+      private_key = #{record.privateKey,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    update public.oauth_client_authority_rel
+  <update id="updateByPrimaryKeySelective" parameterType="com.tm.auth.mbg.model.OauthClientKeypair">
+    update public.oauth_client_keypair
     <set>
-      <if test="clientId != null">
-        client_id = #{clientId,jdbcType=VARCHAR},
+      <if test="publicKey != null">
+        public_key = #{publicKey,jdbcType=VARCHAR},
       </if>
-      <if test="authorityId != null">
-        authority_id = #{authorityId,jdbcType=BIGINT},
+      <if test="privateKey != null">
+        private_key = #{privateKey,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where client_id = #{clientId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientAuthorityRel">
-    update public.oauth_client_authority_rel
-    set client_id = #{clientId,jdbcType=VARCHAR},
-      authority_id = #{authorityId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
+  <update id="updateByPrimaryKey" parameterType="com.tm.auth.mbg.model.OauthClientKeypair">
+    update public.oauth_client_keypair
+    set public_key = #{publicKey,jdbcType=VARCHAR},
+      private_key = #{privateKey,jdbcType=VARCHAR}
+    where client_id = #{clientId,jdbcType=VARCHAR}
   </update>
 </mapper>

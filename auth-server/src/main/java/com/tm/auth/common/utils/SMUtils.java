@@ -1,15 +1,20 @@
 package com.tm.auth.common.utils;
 
+import com.tm.auth.common.api.OAuthExecption;
 import com.tm.auth.common.gmUtils.BCECUtil;
 import com.tm.auth.common.gmUtils.SM2Util;
 import com.tm.auth.common.gmUtils.SM3Util;
 import com.tm.auth.common.gmUtils.SM4Util;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigInteger;
 import java.util.AbstractMap;
 import java.util.Map;
 
@@ -17,6 +22,7 @@ import java.util.Map;
  * @author tangming
  * @date 2022/8/26
  */
+@Slf4j
 public class SMUtils {
     private static final String EPIDEMIC_KEY = "8641F1CF0F312C7DE0BA269C1C47394C";
     private static final byte[] KEY;
@@ -56,6 +62,13 @@ public class SMUtils {
         }
     }
 
+    /**
+     * 生成国密秘钥对
+     * 私钥为私钥对象转16进制字符串后再SM4加密
+     * 公钥为Pem明文
+     *
+     * @return
+     */
     public static Map.Entry<String, String> generateSM2Key() {
         try {
             //生成公私钥
@@ -72,6 +85,25 @@ public class SMUtils {
             return new AbstractMap.SimpleEntry<>(privateEncry, pubKeyX509Pem);
         } catch (Exception e) {
             throw new RuntimeException("generateSM2KeyPair error", e);
+        }
+    }
+
+    public static ECPrivateKeyParameters convertToBCECPrivateKey(String privateKeyEncry) {
+        String privateKeyHexR = sm4Decrypt(privateKeyEncry);
+        ECPrivateKeyParameters privateKey = new ECPrivateKeyParameters(
+                new BigInteger(ByteUtils.fromHexString(privateKeyHexR)), SM2Util.DOMAIN_PARAMS);
+        return privateKey;
+    }
+
+    public static ECPublicKeyParameters convertToBCECPublicKey(String pubKeyX509Pem) {
+        try {
+            byte[] rs_pubKeyX509Der = BCECUtil.convertECPublicKeyPEMToX509(pubKeyX509Pem);
+            BCECPublicKey bcecPublicKey = BCECUtil.convertX509ToECPublicKey(rs_pubKeyX509Der);
+            ECPublicKeyParameters publicKey = BCECUtil.convertPublicKeyToParameters(bcecPublicKey);
+            return publicKey;
+        } catch (Exception e) {
+            log.error("convertToBCECPublicKey error", e);
+            throw new OAuthExecption("convertToBCECPublicKey error " + e.getMessage());
         }
     }
 

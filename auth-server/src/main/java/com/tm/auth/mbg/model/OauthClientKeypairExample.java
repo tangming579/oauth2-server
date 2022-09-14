@@ -3,14 +3,14 @@ package com.tm.auth.mbg.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OauthClientAuthorityRelExample {
+public class OauthClientKeypairExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OauthClientAuthorityRelExample() {
+    public OauthClientKeypairExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,66 +104,6 @@ public class OauthClientAuthorityRelExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(Long value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(Long value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(Long value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(Long value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(Long value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<Long> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<Long> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(Long value1, Long value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(Long value1, Long value2) {
-            addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
         public Criteria andClientIdIsNull() {
             addCriterion("client_id is null");
             return (Criteria) this;
@@ -234,63 +174,143 @@ public class OauthClientAuthorityRelExample {
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdIsNull() {
-            addCriterion("authority_id is null");
+        public Criteria andPublicKeyIsNull() {
+            addCriterion("public_key is null");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdIsNotNull() {
-            addCriterion("authority_id is not null");
+        public Criteria andPublicKeyIsNotNull() {
+            addCriterion("public_key is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdEqualTo(Long value) {
-            addCriterion("authority_id =", value, "authorityId");
+        public Criteria andPublicKeyEqualTo(String value) {
+            addCriterion("public_key =", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotEqualTo(Long value) {
-            addCriterion("authority_id <>", value, "authorityId");
+        public Criteria andPublicKeyNotEqualTo(String value) {
+            addCriterion("public_key <>", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdGreaterThan(Long value) {
-            addCriterion("authority_id >", value, "authorityId");
+        public Criteria andPublicKeyGreaterThan(String value) {
+            addCriterion("public_key >", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("authority_id >=", value, "authorityId");
+        public Criteria andPublicKeyGreaterThanOrEqualTo(String value) {
+            addCriterion("public_key >=", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdLessThan(Long value) {
-            addCriterion("authority_id <", value, "authorityId");
+        public Criteria andPublicKeyLessThan(String value) {
+            addCriterion("public_key <", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdLessThanOrEqualTo(Long value) {
-            addCriterion("authority_id <=", value, "authorityId");
+        public Criteria andPublicKeyLessThanOrEqualTo(String value) {
+            addCriterion("public_key <=", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdIn(List<Long> values) {
-            addCriterion("authority_id in", values, "authorityId");
+        public Criteria andPublicKeyLike(String value) {
+            addCriterion("public_key like", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotIn(List<Long> values) {
-            addCriterion("authority_id not in", values, "authorityId");
+        public Criteria andPublicKeyNotLike(String value) {
+            addCriterion("public_key not like", value, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdBetween(Long value1, Long value2) {
-            addCriterion("authority_id between", value1, value2, "authorityId");
+        public Criteria andPublicKeyIn(List<String> values) {
+            addCriterion("public_key in", values, "publicKey");
             return (Criteria) this;
         }
 
-        public Criteria andAuthorityIdNotBetween(Long value1, Long value2) {
-            addCriterion("authority_id not between", value1, value2, "authorityId");
+        public Criteria andPublicKeyNotIn(List<String> values) {
+            addCriterion("public_key not in", values, "publicKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicKeyBetween(String value1, String value2) {
+            addCriterion("public_key between", value1, value2, "publicKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPublicKeyNotBetween(String value1, String value2) {
+            addCriterion("public_key not between", value1, value2, "publicKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyIsNull() {
+            addCriterion("private_key is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyIsNotNull() {
+            addCriterion("private_key is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyEqualTo(String value) {
+            addCriterion("private_key =", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyNotEqualTo(String value) {
+            addCriterion("private_key <>", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyGreaterThan(String value) {
+            addCriterion("private_key >", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyGreaterThanOrEqualTo(String value) {
+            addCriterion("private_key >=", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyLessThan(String value) {
+            addCriterion("private_key <", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyLessThanOrEqualTo(String value) {
+            addCriterion("private_key <=", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyLike(String value) {
+            addCriterion("private_key like", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyNotLike(String value) {
+            addCriterion("private_key not like", value, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyIn(List<String> values) {
+            addCriterion("private_key in", values, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyNotIn(List<String> values) {
+            addCriterion("private_key not in", values, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyBetween(String value1, String value2) {
+            addCriterion("private_key between", value1, value2, "privateKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrivateKeyNotBetween(String value1, String value2) {
+            addCriterion("private_key not between", value1, value2, "privateKey");
             return (Criteria) this;
         }
     }

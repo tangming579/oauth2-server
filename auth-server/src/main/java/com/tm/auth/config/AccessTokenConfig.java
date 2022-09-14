@@ -2,13 +2,11 @@ package com.tm.auth.config;
 
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.common.gmJwt.SM2JwtTokenStore;
-import com.tm.auth.common.gmUtils.SM2Util;
+import com.tm.auth.service.OAuthJwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-
-import javax.annotation.Resource;
-import java.security.KeyPair;
 
 /**
  * @author tangming
@@ -16,14 +14,11 @@ import java.security.KeyPair;
  */
 @Configuration
 public class AccessTokenConfig {
-    /**
-     * 密钥对
-     */
-    @Resource
-    private KeyPair keyPair;
+    @Autowired
+    private OAuthJwtService oAuthJwtService;
 
     /**
-     * 基于内存的token存储bean
+     * 基于国密SM2的token存储bean
      *
      * @return
      */
@@ -32,7 +27,6 @@ public class AccessTokenConfig {
         return new SM2JwtTokenStore(jwtAccessTokenConverter());
     }
 
-
     /**
      * 配置令牌的创建及验签方式
      * 基于此对象创建的令牌信息会封装到OAuth2AccessToken类型的对象中
@@ -40,29 +34,8 @@ public class AccessTokenConfig {
      */
     @Bean
     public SM2JwtAccessTokenConverter jwtAccessTokenConverter() {
-        SM2JwtAccessTokenConverter jwtAccessTokenConverter = new SM2JwtAccessTokenConverter();
-        //非对称加密签名
-        jwtAccessTokenConverter.setKeyPair(this.keyPair);
-        return jwtAccessTokenConverter;
+        SM2JwtAccessTokenConverter converter = new SM2JwtAccessTokenConverter();
+        converter.setOAuthJwtService(oAuthJwtService);
+        return converter;
     }
-
-    @Bean
-    public KeyPair keyPair() {
-        try {
-            KeyPair KeyPair = SM2Util.generateKeyPair();
-            return KeyPair;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        //默认编码算法的Id,新的密码编码都会使用这个id对应的编码器
-//        String idForEncode = "bcrypt";
-//        Map encoders = new HashMap();
-//        encoders.put(idForEncode,new BCryptPasswordEncoder());
-//        //（默认编码器id，编码器map）
-//        return new DelegatingPasswordEncoder(idForEncode,encoders);
-//    }
 }

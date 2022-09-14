@@ -2,22 +2,14 @@ package com.tm.auth.mbg.model;
 
 import java.io.Serializable;
 
-public class OauthClientAuthorityRel implements Serializable {
-    private Long id;
-
+public class OauthClientKeypair implements Serializable {
     private String clientId;
 
-    private Long authorityId;
+    private String publicKey;
+
+    private String privateKey;
 
     private static final long serialVersionUID = 1L;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getClientId() {
         return clientId;
@@ -27,12 +19,20 @@ public class OauthClientAuthorityRel implements Serializable {
         this.clientId = clientId;
     }
 
-    public Long getAuthorityId() {
-        return authorityId;
+    public String getPublicKey() {
+        return publicKey;
     }
 
-    public void setAuthorityId(Long authorityId) {
-        this.authorityId = authorityId;
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 
     @Override
@@ -41,9 +41,9 @@ public class OauthClientAuthorityRel implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", clientId=").append(clientId);
-        sb.append(", authorityId=").append(authorityId);
+        sb.append(", publicKey=").append(publicKey);
+        sb.append(", privateKey=").append(privateKey);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

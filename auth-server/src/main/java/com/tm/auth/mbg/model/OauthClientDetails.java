@@ -10,13 +10,9 @@ public class OauthClientDetails implements Serializable {
 
     private String clientName;
 
-    private Integer accessTokenValidity;
+    private Integer accessTokenValiditySeconds;
 
     private String clientDesc;
-
-    private String jwtPublicKey;
-
-    private String jwtPrivateKey;
 
     private Date createTime;
 
@@ -46,12 +42,12 @@ public class OauthClientDetails implements Serializable {
         this.clientName = clientName;
     }
 
-    public Integer getAccessTokenValidity() {
-        return accessTokenValidity;
+    public Integer getAccessTokenValiditySeconds() {
+        return accessTokenValiditySeconds;
     }
 
-    public void setAccessTokenValidity(Integer accessTokenValidity) {
-        this.accessTokenValidity = accessTokenValidity;
+    public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
+        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
     }
 
     public String getClientDesc() {
@@ -60,22 +56,6 @@ public class OauthClientDetails implements Serializable {
 
     public void setClientDesc(String clientDesc) {
         this.clientDesc = clientDesc;
-    }
-
-    public String getJwtPublicKey() {
-        return jwtPublicKey;
-    }
-
-    public void setJwtPublicKey(String jwtPublicKey) {
-        this.jwtPublicKey = jwtPublicKey;
-    }
-
-    public String getJwtPrivateKey() {
-        return jwtPrivateKey;
-    }
-
-    public void setJwtPrivateKey(String jwtPrivateKey) {
-        this.jwtPrivateKey = jwtPrivateKey;
     }
 
     public Date getCreateTime() {
@@ -95,10 +75,8 @@ public class OauthClientDetails implements Serializable {
         sb.append(", clientId=").append(clientId);
         sb.append(", clientSecret=").append(clientSecret);
         sb.append(", clientName=").append(clientName);
-        sb.append(", accessTokenValidity=").append(accessTokenValidity);
+        sb.append(", accessTokenValiditySeconds=").append(accessTokenValiditySeconds);
         sb.append(", clientDesc=").append(clientDesc);
-        sb.append(", jwtPublicKey=").append(jwtPublicKey);
-        sb.append(", jwtPrivateKey=").append(jwtPrivateKey);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

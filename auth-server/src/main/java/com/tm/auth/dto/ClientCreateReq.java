@@ -2,12 +2,10 @@ package com.tm.auth.dto;
 
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.*;
 
 /**
  * @author tangming
@@ -15,23 +13,24 @@ import java.util.*;
  */
 @Data
 @ToString
-public class AuthClientRequest {
+public class ClientCreateReq {
 
     /**
      * 客户端ID
      */
-    @NotBlank(message = "客户端ID不能为空")
+    @NotBlank(message = "不能为空")
     private String clientId;
 
     /**
      * 客户端密钥
      */
-    @NotBlank(message = "客户端密码不能为空")
+    @NotBlank(message = "不能为空")
     private String clientSecret;
 
     /**
      * 客户端名称
      */
+    @NotBlank(message = "不能为空")
     private String clientName;
 
     /**
@@ -43,7 +42,6 @@ public class AuthClientRequest {
      * accessToken 有效时间
      * 单位:秒
      */
-    @NotNull(message = "accessToken有效时间不能为空")
-    @Min(value = 60, message = "排序最小为60")
-    private Integer accessTokenValidity;
+    @Min(value = 60, message = "最小为60")
+    private Integer accessTokenValiditySeconds;
 }

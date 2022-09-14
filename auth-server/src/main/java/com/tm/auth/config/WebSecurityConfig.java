@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
  * @date: 2022-08-10
  */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
@@ -45,7 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
-                authorizeRequests().anyRequest().permitAll()
+                authorizeRequests()
+                //.antMatchers("/oauth/**").permitAll()
+                //.anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and().csrf().disable().cors();
     }
 

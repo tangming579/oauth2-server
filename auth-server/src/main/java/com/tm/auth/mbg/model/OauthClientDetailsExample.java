@@ -315,63 +315,63 @@ public class OauthClientDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIsNull() {
-            addCriterion("access_token_validity is null");
+        public Criteria andAccessTokenValiditySecondsIsNull() {
+            addCriterion("access_token_validity_seconds is null");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIsNotNull() {
-            addCriterion("access_token_validity is not null");
+        public Criteria andAccessTokenValiditySecondsIsNotNull() {
+            addCriterion("access_token_validity_seconds is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityEqualTo(Integer value) {
-            addCriterion("access_token_validity =", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds =", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotEqualTo(Integer value) {
-            addCriterion("access_token_validity <>", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds <>", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityGreaterThan(Integer value) {
-            addCriterion("access_token_validity >", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsGreaterThan(Integer value) {
+            addCriterion("access_token_validity_seconds >", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("access_token_validity >=", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds >=", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityLessThan(Integer value) {
-            addCriterion("access_token_validity <", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsLessThan(Integer value) {
+            addCriterion("access_token_validity_seconds <", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityLessThanOrEqualTo(Integer value) {
-            addCriterion("access_token_validity <=", value, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsLessThanOrEqualTo(Integer value) {
+            addCriterion("access_token_validity_seconds <=", value, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityIn(List<Integer> values) {
-            addCriterion("access_token_validity in", values, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsIn(List<Integer> values) {
+            addCriterion("access_token_validity_seconds in", values, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotIn(List<Integer> values) {
-            addCriterion("access_token_validity not in", values, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotIn(List<Integer> values) {
+            addCriterion("access_token_validity_seconds not in", values, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityBetween(Integer value1, Integer value2) {
-            addCriterion("access_token_validity between", value1, value2, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsBetween(Integer value1, Integer value2) {
+            addCriterion("access_token_validity_seconds between", value1, value2, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
-        public Criteria andAccessTokenValidityNotBetween(Integer value1, Integer value2) {
-            addCriterion("access_token_validity not between", value1, value2, "accessTokenValidity");
+        public Criteria andAccessTokenValiditySecondsNotBetween(Integer value1, Integer value2) {
+            addCriterion("access_token_validity_seconds not between", value1, value2, "accessTokenValiditySeconds");
             return (Criteria) this;
         }
 
@@ -442,146 +442,6 @@ public class OauthClientDetailsExample {
 
         public Criteria andClientDescNotBetween(String value1, String value2) {
             addCriterion("client_desc not between", value1, value2, "clientDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyIsNull() {
-            addCriterion("jwt_public_key is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyIsNotNull() {
-            addCriterion("jwt_public_key is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyEqualTo(String value) {
-            addCriterion("jwt_public_key =", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyNotEqualTo(String value) {
-            addCriterion("jwt_public_key <>", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyGreaterThan(String value) {
-            addCriterion("jwt_public_key >", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("jwt_public_key >=", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyLessThan(String value) {
-            addCriterion("jwt_public_key <", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyLessThanOrEqualTo(String value) {
-            addCriterion("jwt_public_key <=", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyLike(String value) {
-            addCriterion("jwt_public_key like", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyNotLike(String value) {
-            addCriterion("jwt_public_key not like", value, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyIn(List<String> values) {
-            addCriterion("jwt_public_key in", values, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyNotIn(List<String> values) {
-            addCriterion("jwt_public_key not in", values, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyBetween(String value1, String value2) {
-            addCriterion("jwt_public_key between", value1, value2, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPublicKeyNotBetween(String value1, String value2) {
-            addCriterion("jwt_public_key not between", value1, value2, "jwtPublicKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyIsNull() {
-            addCriterion("jwt_private_key is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyIsNotNull() {
-            addCriterion("jwt_private_key is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyEqualTo(String value) {
-            addCriterion("jwt_private_key =", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyNotEqualTo(String value) {
-            addCriterion("jwt_private_key <>", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyGreaterThan(String value) {
-            addCriterion("jwt_private_key >", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("jwt_private_key >=", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyLessThan(String value) {
-            addCriterion("jwt_private_key <", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyLessThanOrEqualTo(String value) {
-            addCriterion("jwt_private_key <=", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyLike(String value) {
-            addCriterion("jwt_private_key like", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyNotLike(String value) {
-            addCriterion("jwt_private_key not like", value, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyIn(List<String> values) {
-            addCriterion("jwt_private_key in", values, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyNotIn(List<String> values) {
-            addCriterion("jwt_private_key not in", values, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyBetween(String value1, String value2) {
-            addCriterion("jwt_private_key between", value1, value2, "jwtPrivateKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andJwtPrivateKeyNotBetween(String value1, String value2) {
-            addCriterion("jwt_private_key not between", value1, value2, "jwtPrivateKey");
             return (Criteria) this;
         }
 

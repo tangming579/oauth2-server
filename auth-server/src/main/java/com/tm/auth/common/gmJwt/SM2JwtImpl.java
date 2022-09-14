@@ -44,6 +44,6 @@ public class SM2JwtImpl implements Jwt {
     }
 
     public byte[] content() {
-        return Codecs.concat(new byte[][]{Codecs.b64UrlEncode(this.header), PERIOD, Codecs.b64UrlEncode(this.payload)});
+        return Codecs.concat(Codecs.b64UrlEncode(this.header), PERIOD, Codecs.b64UrlEncode(this.payload));
     }
 }

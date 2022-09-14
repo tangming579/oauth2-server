@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class OauthAuthority implements Serializable {
     private Long id;
 
-    private String clientId;
+    private String targetId;
 
     private String methods;
 
@@ -21,12 +21,12 @@ public class OauthAuthority implements Serializable {
         this.id = id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getTargetId() {
+        return targetId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
     }
 
     public String getMethods() {
@@ -52,7 +52,7 @@ public class OauthAuthority implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", clientId=").append(clientId);
+        sb.append(", targetId=").append(targetId);
         sb.append(", methods=").append(methods);
         sb.append(", paths=").append(paths);
         sb.append(", serialVersionUID=").append(serialVersionUID);

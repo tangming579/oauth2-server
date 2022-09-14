@@ -1,13 +1,14 @@
 package com.tm.auth.config;
 
+import com.tm.auth.common.api.OAuthExceptionTranslator;
 import com.tm.auth.common.converter.SM2JwtAccessTokenConverter;
 import com.tm.auth.common.gmJwt.SM3PasswordEncoder;
-import com.tm.auth.service.ClientDetailsServiceImpl;
+import com.tm.auth.service.OAuthClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -31,17 +32,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Resource
     TokenStore tokenStore;
-
     @Resource
     SM2JwtAccessTokenConverter accessTokenConverter;
-
     @Resource
     private PasswordEncoder passwordEncoder;
     @Resource
     private AuthenticationManager authenticationManager;
-
     @Resource
-    ClientDetailsServiceImpl clientService;
+    private OAuthClientService clientService;
+    @Autowired
+    private OAuthExceptionTranslator providerExceptionHandler;
 
 
     /**
@@ -88,9 +88,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 
         endpoints.authenticationManager(authenticationManager)
-                .tokenStore(tokenStore)
-                .accessTokenConverter(accessTokenConverter)
-                .tokenServices(tokenServices()); // 设置检验token 服务配置
+                // 设置检验token 服务配置
+                .tokenServices(tokenServices())
+                // 自定义异常翻译器
+                .exceptionTranslator(providerExceptionHandler);
     }
 
     @Bean
