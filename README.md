@@ -1,5 +1,26 @@
 # oauth2-server
-基于 OAuth 2.0 的服务认证授权的技术调研
+基于 OAuth 2.0 的服务认证授权的技术调研Demo，不包含实际业务
+
+**技术选型**
+- 基础框架：Spring Boot 2.3.12.RELEASE + Spring Cloud Hoxton.SR12
+- 注册中心：Consul
+- 服务调用：Feign
+- jwt 加密：bouncycastle
+- 日志：logback
+- PageHelper分页
+- Spring Security OAuth 2.0 框架
+- Mybatis + Mybatis-plus
+- PostgreSQL 数据库
+- 自定义Filter,避免XSS攻击和SQL注入攻击
+- Swagger API管理
+
+**开发环境**
+
+- 语言：Java 8
+
+- IDE：IntelliJ IDEA 2022.12 x64
+
+- 依赖管理：Maven
 
 ## 1.概念
 

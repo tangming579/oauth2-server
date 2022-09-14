@@ -20,7 +20,7 @@ class ApplicationTests {
     void contextLoads() {
     }
 
-    private static final String EPIDEMIC_KEY = "8641F1CF0F312C7DE0BA269C1C47394C";
+    private static final String EPIDEMIC_KEY = "6641F1CF0F312C7DE0BA269C1C47394D";
     @Test
     void jwtTest2() {
         try {
