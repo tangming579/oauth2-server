@@ -1,5 +1,14 @@
 # oauth2-server
-基于 OAuth 2.0 的服务认证授权的技术调研Demo，不包含实际业务
+基于 OAuth 2.0 的服务认证授权的技术调研Demo，使用国密算法生成非对称加密jwt，不包含实际业务
+
+**主要功能**
+- 创建服务信息
+- 修改服务信息
+- 配置服务权限
+- 生成服务jwt公私秘钥
+- 根据AppID和AppSecret获取令牌
+- 令牌校验
+- 获取服务公钥
 
 **技术选型**
 - 基础框架：Spring Boot 2.3.12.RELEASE + Spring Cloud Hoxton.SR12
