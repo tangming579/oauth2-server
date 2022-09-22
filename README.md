@@ -20,7 +20,6 @@
 - Spring Security OAuth 2.0 框架
 - Mybatis + Mybatis-plus
 - PostgreSQL 数据库
-- 自定义Filter,避免XSS攻击和SQL注入攻击
 - Swagger API管理
 
 **开发环境**
